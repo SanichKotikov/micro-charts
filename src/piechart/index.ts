@@ -12,7 +12,7 @@ export function createPieChart(
   setup(canvas, opt);
 
   const slices = calc(data, opt);
-  draw(canvas, slices);
+  draw(canvas, slices, opt);
 
   return handleEvents(canvas, slices, opt);
 }

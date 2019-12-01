@@ -17,6 +17,7 @@ export interface IPieChartOptions {
   readonly size: number;
   readonly round: number;
   readonly variable: boolean;
+  readonly stroke: number;
   readonly onHoverChange?: PieChartHoverHandler;
 }
 

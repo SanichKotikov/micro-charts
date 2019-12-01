@@ -1,5 +1,17 @@
-import { IPieChartData, IPieChartOptions, IPieChartTemplate, IPieChartSlice } from './types';
-import { CIRCLE, START_ANGLE, RADIUS_STEP, RADIUS_MIN_BORDER, ROUND_STEP } from './constants';
+import {
+  IPieChartData,
+  IPieChartOptions,
+  IPieChartTemplate,
+  IPieChartSlice,
+} from './types';
+import {
+  CIRCLE,
+  START_ANGLE,
+  RADIUS_STEP,
+  RADIUS_MIN_BORDER,
+  ROUND_STEP,
+  STROKE_COLOR,
+} from './constants';
 
 function getArcAngle(percent: number) {
   return percent * CIRCLE / 100 /* % */;
@@ -106,14 +118,20 @@ export function calc(
 export function draw(
   canvas: HTMLCanvasElement,
   slices: ReadonlyArray<IPieChartSlice>,
+  options: IPieChartOptions,
   handler?: (ctx: CanvasRenderingContext2D, path: Path2D, data: IPieChartData) => void,
 ) {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  ctx.lineWidth = options.stroke;
+  ctx.strokeStyle = STROKE_COLOR;
+
   slices.forEach((item) => {
     ctx.fillStyle = item.data.color;
     if (handler) handler(ctx, item.path, item.data);
-    ctx.fill(item.view || item.path);
+    const path = item.view || item.path;
+    ctx.fill(path);
+    if (options.stroke > 0) ctx.stroke(path);
   });
 }

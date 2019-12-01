@@ -8,9 +8,12 @@ export const RADIUS_MIN_BORDER = 40; // %
 
 export const ROUND_STEP = 4; // %
 
+export const STROKE_COLOR = '#fff';
+
 export const OPTIONS: IPieChartOptions = {
   ratio: window.devicePixelRatio || 1,
   size: 200,
   round: 0,
   variable: false,
+  stroke: 0,
 };

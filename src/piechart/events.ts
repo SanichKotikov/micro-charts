@@ -16,7 +16,7 @@ function onMouseMove(
     const cX = (clientX - left) * ratio;
     const cY = (clientY - top) * ratio;
 
-    draw(canvas, slices, (ctx, path, data) => {
+    draw(canvas, slices, options, (ctx, path, data) => {
       if (found === undefined && ctx.isPointInPath(path, cX, cY)) {
         ctx.globalAlpha = 0.8;
         found = data;
@@ -37,7 +37,7 @@ function onMouseLeave(
   options: IPieChartOptions,
 ) {
   return () => {
-    draw(canvas, slices);
+    draw(canvas, slices, options);
     if (options.onHoverChange) options.onHoverChange(undefined);
   }
 }
