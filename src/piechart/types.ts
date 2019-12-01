@@ -16,6 +16,7 @@ export interface IPieChartOptions {
   ratio: number;
   size: number;
   round: number;
+  variable: boolean;
   onHoverChange?: PieChartHoverHandler;
 }
 

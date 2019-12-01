@@ -12,4 +12,5 @@ export const OPTIONS: IPieChartOptions = {
   ratio: window.devicePixelRatio || 1,
   size: 200,
   round: 0,
+  variable: false,
 };

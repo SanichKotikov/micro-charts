@@ -14,7 +14,10 @@ function getArcPoint(center: number, radius: number, angle: number) {
 
 function calcTemplate(data: IPieChartData[], options: IPieChartOptions): IPieChartTemplate[] {
   const center = options.size / 2;
-  const rStep = Math.min(RADIUS_MIN_BORDER / data.length, RADIUS_STEP);
+
+  const rStep = options.variable
+    ? Math.min(RADIUS_MIN_BORDER / data.length, RADIUS_STEP)
+    : 0;
 
   return data
     .map((item, idx) => ({ percent: item.percent, order: idx }))
@@ -23,7 +26,7 @@ function calcTemplate(data: IPieChartData[], options: IPieChartOptions): IPieCha
       const { percent, order } = item;
 
       const angle = getArcAngle(percent);
-      const radius = (100 - (idx * rStep)) * center / 100;
+      const radius = options.variable ? (100 - (idx * rStep)) * center / 100 : center;
       const round = (100 - (idx * ROUND_STEP)) * options.round / 100;
       const length = radius * Math.abs(angle);
 
