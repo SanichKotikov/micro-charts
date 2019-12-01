@@ -12,7 +12,10 @@ function getArcPoint(center: number, radius: number, angle: number) {
   ];
 }
 
-function calcTemplate(data: IPieChartData[], options: IPieChartOptions): IPieChartTemplate[] {
+function calcTemplate(
+  data: ReadonlyArray<IPieChartData>,
+  options: IPieChartOptions,
+): ReadonlyArray<IPieChartTemplate> {
   const center = options.size / 2;
 
   const rStep = options.variable
@@ -34,7 +37,12 @@ function calcTemplate(data: IPieChartData[], options: IPieChartOptions): IPieCha
     });
 }
 
-function getRoundedPath(center: number, tpl: IPieChartTemplate, start: number, end: number) {
+function getRoundedPath(
+  center: number,
+  tpl: IPieChartTemplate,
+  start: number,
+  end: number,
+): Readonly<Path2D> {
   const rAngle = tpl.round * CIRCLE / (Math.PI * (tpl.radius * 2));
 
   const [sX0, sY0] = getArcPoint(center, tpl.radius, start);
@@ -68,7 +76,10 @@ export function setup(canvas: HTMLCanvasElement, options: IPieChartOptions) {
   ctx.scale(ratio, ratio);
 }
 
-export function calc(data: IPieChartData[], options: IPieChartOptions): IPieChartSlice[] {
+export function calc(
+  data: ReadonlyArray<IPieChartData>,
+  options: IPieChartOptions,
+): ReadonlyArray<IPieChartSlice> {
   const center = options.size / 2;
   const template = calcTemplate(data, options);
 
@@ -94,7 +105,7 @@ export function calc(data: IPieChartData[], options: IPieChartOptions): IPieChar
 
 export function draw(
   canvas: HTMLCanvasElement,
-  slices: IPieChartSlice[],
+  slices: ReadonlyArray<IPieChartSlice>,
   handler?: (ctx: CanvasRenderingContext2D, path: Path2D, data: IPieChartData) => void,
 ) {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;

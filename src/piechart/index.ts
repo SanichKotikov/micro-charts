@@ -5,10 +5,10 @@ import { handleEvents } from './events';
 
 export function createPieChart(
   canvas: HTMLCanvasElement,
-  data: IPieChartData[],
+  data: ReadonlyArray<IPieChartData>,
   options: Partial<IPieChartOptions> = {},
 ) {
-  const opt = { ...OPTIONS, ...options };
+  const opt: IPieChartOptions = { ...OPTIONS, ...options };
   setup(canvas, opt);
 
   const slices = calc(data, opt);

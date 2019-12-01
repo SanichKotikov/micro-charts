@@ -1,7 +1,11 @@
 import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
 import { draw } from './helpers';
 
-function onMouseMove(canvas: HTMLCanvasElement, slices: IPieChartSlice[], options: IPieChartOptions) {
+function onMouseMove(
+  canvas: HTMLCanvasElement,
+  slices: ReadonlyArray<IPieChartSlice>,
+  options: IPieChartOptions,
+) {
   return (event: MouseEvent) => {
     let found: IPieChartData | undefined = undefined;
     const { ratio } = options;
@@ -27,14 +31,22 @@ function onMouseMove(canvas: HTMLCanvasElement, slices: IPieChartSlice[], option
   };
 }
 
-function onMouseLeave(canvas: HTMLCanvasElement, slices: IPieChartSlice[], options: IPieChartOptions) {
+function onMouseLeave(
+  canvas: HTMLCanvasElement,
+  slices: ReadonlyArray<IPieChartSlice>,
+  options: IPieChartOptions,
+) {
   return () => {
     draw(canvas, slices);
     if (options.onHoverChange) options.onHoverChange(undefined);
   }
 }
 
-export function handleEvents(canvas: HTMLCanvasElement, slices: IPieChartSlice[], options: IPieChartOptions) {
+export function handleEvents(
+  canvas: HTMLCanvasElement,
+  slices: ReadonlyArray<IPieChartSlice>,
+  options: IPieChartOptions,
+) {
   const moveHandle = options.onHoverChange && onMouseMove(canvas, slices, options);
   const leaveHandle = options.onHoverChange && onMouseLeave(canvas, slices, options);
 

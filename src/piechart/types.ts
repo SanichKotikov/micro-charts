@@ -1,34 +1,34 @@
 export interface IPieChartData<T = any> {
-  id: T;
-  percent: number;
-  color: string;
+  readonly id: T;
+  readonly percent: number;
+  readonly color: string;
 }
 
 export interface IPieChartHoverData {
-  data: IPieChartData;
-  clientX: number;
-  clientY: number;
+  readonly data: IPieChartData;
+  readonly clientX: number;
+  readonly clientY: number;
 }
 
 export type PieChartHoverHandler = (value: IPieChartHoverData | undefined) => void;
 
 export interface IPieChartOptions {
-  ratio: number;
-  size: number;
-  round: number;
-  variable: boolean;
-  onHoverChange?: PieChartHoverHandler;
+  readonly ratio: number;
+  readonly size: number;
+  readonly round: number;
+  readonly variable: boolean;
+  readonly onHoverChange?: PieChartHoverHandler;
 }
 
 export interface IPieChartTemplate {
-  order: number;
-  angle: number;
-  radius: number;
-  round: number;
+  readonly order: number;
+  readonly angle: number;
+  readonly radius: number;
+  readonly round: number;
 }
 
 export interface IPieChartSlice {
-  data: IPieChartData;
-  path: Path2D;
-  view?: Path2D;
+  readonly data: IPieChartData;
+  readonly path: Path2D;
+  readonly view?: Path2D;
 }
