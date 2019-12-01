@@ -1,0 +1,33 @@
+{
+  "name": "micro-charts",
+  "version": "0.1.0",
+  "description": "A tiny library for rendering simple charts",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "tsc --watch",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanichKotikov/micro-charts.git"
+  },
+  "author": "Sanich Kotikov <sancho@cdrpro.ru> (https://sanichkotikov.github.io)",
+  "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "charts",
+    "piechart",
+    "chart",
+    "pie",
+    "graph"
+  ],
+  "bugs": {
+    "url": "https://github.com/SanichKotikov/micro-charts/issues"
+  },
+  "devDependencies": {
+    "typescript": "3.7.2"
+  },
+  "homepage": "https://github.com/SanichKotikov/micro-charts"
+}
