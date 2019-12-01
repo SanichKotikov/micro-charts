@@ -1,4 +1,5 @@
 import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
+import { HOVER_ALPHA } from './constants';
 import { draw } from './helpers';
 
 function onMouseMove(
@@ -18,7 +19,7 @@ function onMouseMove(
 
     draw(canvas, slices, options, (ctx, path, data) => {
       if (found === undefined && ctx.isPointInPath(path, cX, cY)) {
-        ctx.globalAlpha = 0.8;
+        ctx.globalAlpha = HOVER_ALPHA;
         found = data;
         return;
       }

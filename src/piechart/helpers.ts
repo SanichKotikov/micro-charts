@@ -93,6 +93,13 @@ export function calc(
   options: IPieChartOptions,
 ): ReadonlyArray<IPieChartSlice> {
   const center = options.size / 2;
+
+  if (data.length === 1) {
+    const path = new Path2D();
+    path.arc(center, center, center, 0, CIRCLE);
+    return [{ data: data[0], path }];
+  }
+
   const template = calcTemplate(data, options);
 
   let start = START_ANGLE;
@@ -123,7 +130,7 @@ export function draw(
 ) {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  ctx.globalAlpha = 1;
   ctx.lineWidth = options.stroke;
   ctx.strokeStyle = STROKE_COLOR;
 

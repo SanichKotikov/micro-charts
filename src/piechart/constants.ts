@@ -8,6 +8,7 @@ export const RADIUS_MIN_BORDER = 40; // %
 
 export const ROUND_STEP = 4; // %
 
+export const HOVER_ALPHA = 0.9;
 export const STROKE_COLOR = '#fff';
 
 export const OPTIONS: IPieChartOptions = {
