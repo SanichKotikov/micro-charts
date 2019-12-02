@@ -10,6 +10,7 @@ export interface IPieChartHoverData {
   readonly clientY: number;
 }
 
+export type PieChartClickHandler = (data: IPieChartData) => void;
 export type PieChartHoverHandler = (value: IPieChartHoverData | undefined) => void;
 
 export interface IPieChartOptions {
@@ -18,6 +19,7 @@ export interface IPieChartOptions {
   readonly round: number;
   readonly variable: boolean;
   readonly stroke: number;
+  readonly onClick?: PieChartClickHandler;
   readonly onHoverChange?: PieChartHoverHandler;
 }
 
