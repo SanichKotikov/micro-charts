@@ -38,12 +38,14 @@ function onMouseMove(
   return (event: MouseEvent) => {
     if (!options.onHoverChange) return;
 
+    let cursor: string = 'default';
     let found: IPieChartData | undefined = undefined;
     const [cX, cY] = getEventXY(canvas, options.ratio, event);
 
     draw(canvas, slices, options, (ctx, path, data) => {
       if (found === undefined && ctx.isPointInPath(path, cX, cY)) {
         ctx.globalAlpha = HOVER_ALPHA;
+        cursor = 'pointer';
         found = data;
         return;
       }
@@ -52,6 +54,7 @@ function onMouseMove(
 
     const { clientX, clientY } = event;
     options.onHoverChange(found && { data: found, clientX, clientY });
+    if (options.onClick) canvas.style.cursor = cursor;
   };
 }
 
@@ -63,6 +66,7 @@ function onMouseLeave(
   return () => {
     draw(canvas, slices, options);
     if (options.onHoverChange) options.onHoverChange(undefined);
+    if (options.onClick) canvas.style.cursor = 'default';
   }
 }
 
