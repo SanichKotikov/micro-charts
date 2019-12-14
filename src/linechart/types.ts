@@ -12,6 +12,8 @@ export interface ILineChartOptions {
   readonly levelCount: number;
   readonly levelStroke: number;
   readonly levelColor: string;
+  readonly top?: number;
+  readonly bottom?: number;
 }
 
 export interface IOptions extends ILineChartOptions {

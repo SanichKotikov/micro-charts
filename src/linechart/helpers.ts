@@ -16,15 +16,15 @@ export function setup(canvas: HTMLCanvasElement, options: ILineChartOptions): IO
 }
 
 export function draw(canvas: HTMLCanvasElement, data: ReadonlyArray<ILineChartData>, options: IOptions) {
-  const { width, height, levelStroke } = options;
+  const { width, height, levelStroke, top, bottom } = options;
 
   const border = height * 5 / 100;
   const padding = levelStroke / 2;
 
   const values = data.map(item => item.value);
 
-  const upper = Math.ceil(Math.max.apply(null, values));
-  const lower = Math.floor(Math.min.apply(null, values));
+  const upper = top ?? Math.ceil(Math.max.apply(null, values));
+  const lower = bottom ?? Math.floor(Math.min.apply(null, values));
 
   const W = width / (data.length - 1);
   const H = (height - (padding * 2) - (border * 2)) / (upper - lower);
