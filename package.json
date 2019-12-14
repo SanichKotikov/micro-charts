@@ -6,7 +6,7 @@
   "module": "lib/index.js",
   "scripts": {
     "start": "parcel docs/index.html --open",
-    "docs": "rm -rf dist && parcel build docs/index.html --no-source-maps",
+    "docs": "rm -rf dist && parcel build docs/index.html --no-source-maps --public-url /micro-charts/",
     "build": "tsc",
     "predeploy": "npm run docs",
     "deploy": "gh-pages -d dist"
