@@ -27,7 +27,28 @@ h1 {
 }
 
 .description {
+  margin: 0 0 8px;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
   margin: 0;
+}
+
+.link + .link {
+  margin-left: 16px;
+}
+
+a {
+  color: #4e5098;
+  text-decoration: none;
+}
+
+a:hover {
+  color: cornflowerblue;
 }
 
 section {
