@@ -43,6 +43,9 @@
     },
     {
       "path": "lib/piechart/index.js"
+    },
+    {
+      "path": "lib/index.js"
     }
   ],
   "homepage": "https://github.com/SanichKotikov/micro-charts"
