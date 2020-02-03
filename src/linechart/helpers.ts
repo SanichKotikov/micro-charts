@@ -1,6 +1,13 @@
-import { ILineChartData, ILineChartOptions, IOptions } from './types';
+import { ILineChartData, IPoint, ILineChartOptions, IOptions } from './types';
 
-export function setup(canvas: HTMLCanvasElement, options: ILineChartOptions): IOptions {
+export function calcPadding(levelStroke: number) {
+  return levelStroke / 2;
+}
+
+export function setup(
+  canvas: HTMLCanvasElement,
+  options: ILineChartOptions,
+): { ctx: CanvasRenderingContext2D, opt: IOptions } {
   const { ratio } = options;
   const { width, height } = canvas;
 
@@ -11,35 +18,41 @@ export function setup(canvas: HTMLCanvasElement, options: ILineChartOptions): IO
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.scale(ratio, ratio);
+  ctx.clearRect(0, 0, width, height);
 
-  return { ...options, width, height };
+  return { ctx, opt: { ...options, width, height } };
 }
 
-export function draw(canvas: HTMLCanvasElement, data: ReadonlyArray<ILineChartData>, options: IOptions) {
+export function calcPoints(
+  data: ReadonlyArray<ILineChartData>,
+  options: IOptions,
+): ReadonlyArray<IPoint> {
   const { width, height, levelStroke, top, bottom } = options;
 
   const border = height * 5 / 100;
-  const padding = levelStroke / 2;
+  const padding = calcPadding(levelStroke);
 
   const values = data.map(item => item.value);
-
   const upper = top ?? Math.ceil(Math.max.apply(null, values));
   const lower = bottom ?? Math.floor(Math.min.apply(null, values));
 
   const W = width / (data.length - 1);
   const H = (height - (padding * 2) - (border * 2)) / (upper - lower);
 
-  const points = data.map((item, i) => ({
+  return data.map((item, i) => ({
     x: i * W,
     y: (upper - item.value) * H + padding + border,
   }));
+}
 
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.clearRect(0, 0, width, height);
-
-  // fill
-  const fill = options.fill;
+export function drawFill(
+  ctx: CanvasRenderingContext2D,
+  points: ReadonlyArray<IPoint>,
+  options: IOptions,
+) {
+  const { height, width, fill } = options;
   let background: string | CanvasGradient = 'transparent';
+
   if (Array.isArray(fill)) {
     if (fill.length == 1) background = fill[0];
     else if (fill.length > 1) {
@@ -53,6 +66,7 @@ export function draw(canvas: HTMLCanvasElement, data: ReadonlyArray<ILineChartDa
   } else {
     background = fill as string;
   }
+
   ctx.beginPath();
   ctx.lineTo(0, height);
   points.forEach(({ x, y }) => ctx.lineTo(x, y));
@@ -60,8 +74,13 @@ export function draw(canvas: HTMLCanvasElement, data: ReadonlyArray<ILineChartDa
   ctx.closePath();
   ctx.fillStyle = background;
   ctx.fill();
+}
 
-  // line
+export function drawLine(
+  ctx: CanvasRenderingContext2D,
+  points: ReadonlyArray<IPoint>,
+  options: IOptions,
+) {
   if (options.stroke > 0) {
     ctx.beginPath();
     points.forEach(({ x, y }) => ctx.lineTo(x, y));
@@ -70,7 +89,6 @@ export function draw(canvas: HTMLCanvasElement, data: ReadonlyArray<ILineChartDa
     ctx.stroke();
   }
 
-  // points
   if (options.pointRadius > 0) {
     ctx.fillStyle = options.color;
     points.forEach(({ x, y }, i, self) => {
@@ -81,22 +99,24 @@ export function draw(canvas: HTMLCanvasElement, data: ReadonlyArray<ILineChartDa
       }
     });
   }
+}
 
-  // levels
-  const levelCount = options.levelCount;
+export function drawRows(ctx: CanvasRenderingContext2D, options: IOptions) {
+  const { levelStroke, levelCount } = options;
+  if (!Number.isFinite(levelCount) || levelCount <= 0 || levelStroke <= 0) return;
 
-  if (Number.isFinite(levelCount) && levelCount > 0 && levelStroke > 0) {
-    const count = Math.ceil(levelCount);
-    const L = (height - padding * 2) / count;
+  const { width, height } = options;
+  const count = Math.ceil(levelCount);
+  const padding = calcPadding(levelStroke);
+  const L = (height - padding * 2) / count;
 
-    for (let i = 0; i < count + 1; i++) {
-      const y = (i * L) + padding;
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-      ctx.lineWidth = levelStroke;
-      ctx.strokeStyle = options.levelColor;
-      ctx.stroke();
-    }
+  for (let i = 0; i < count + 1; i++) {
+    const y = (i * L) + padding;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(width, y);
+    ctx.lineWidth = levelStroke;
+    ctx.strokeStyle = options.levelColor;
+    ctx.stroke();
   }
 }

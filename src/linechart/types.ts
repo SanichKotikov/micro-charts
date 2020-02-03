@@ -3,6 +3,11 @@ export interface ILineChartData<T = any> {
   readonly value: number,
 }
 
+export interface IPoint {
+  readonly x: number;
+  readonly y: number;
+}
+
 export interface ILineChartOptions {
   readonly ratio: number;
   readonly stroke: number;
