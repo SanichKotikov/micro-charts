@@ -9,4 +9,6 @@ export const OPTIONS: ILineChartOptions = {
   levelCount: 3,
   levelStroke: 0.5,
   levelColor: 'rgba(80, 140, 255, 0.5)',
+  hoverType: 'point',
+  hoverColor: 'rgba(80, 140, 255, 0.05)',
 };

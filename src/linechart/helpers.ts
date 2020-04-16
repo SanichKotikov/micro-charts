@@ -18,7 +18,6 @@ export function setup(
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.scale(ratio, ratio);
-  ctx.clearRect(0, 0, width, height);
 
   return { ctx, opt: { ...options, width, height } };
 }
@@ -27,7 +26,7 @@ export function calcPoints(
   data: ReadonlyArray<ILineChartData>,
   options: IOptions,
 ): ReadonlyArray<IPoint> {
-  const { width, height, levelStroke, top, bottom } = options;
+  const { width, height, levelStroke, top, bottom, hoverType, onHoverChange } = options;
 
   const border = height * 5 / 100;
   const padding = calcPadding(levelStroke);
@@ -39,10 +38,19 @@ export function calcPoints(
   const W = width / (data.length - 1);
   const H = (height - (padding * 2) - (border * 2)) / (upper - lower);
 
-  return data.map((item, i) => ({
-    x: i * W,
-    y: (upper - item.value) * H + padding + border,
-  }));
+  return data.map((item, i) => {
+    const x = i * W;
+    const y = (upper - item.value) * H + padding + border;
+    const segment = new Path2D();
+
+    if (onHoverChange) {
+      hoverType === 'segment'
+        ? segment.rect((i - 1) * W, 0, W, height)
+        : segment.arc(x, y, options.pointRadius * 6, 0, Math.PI * 2);
+    }
+
+    return { data: item, x, y, segment };
+  });
 }
 
 export function drawFill(
@@ -119,4 +127,16 @@ export function drawRows(ctx: CanvasRenderingContext2D, options: IOptions) {
     ctx.strokeStyle = options.levelColor;
     ctx.stroke();
   }
+}
+
+export function draw(
+  ctx: CanvasRenderingContext2D,
+  points: ReadonlyArray<IPoint>,
+  options: IOptions,
+) {
+  const { width, height } = options;
+  ctx.clearRect(0, 0, width, height);
+  drawFill(ctx, points, options);
+  drawLine(ctx, points, options);
+  drawRows(ctx, options);
 }

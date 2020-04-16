@@ -1,6 +1,7 @@
 import { ILineChartData, ILineChartOptions } from './types';
 import { OPTIONS } from './constants';
-import { setup, calcPoints, drawFill, drawLine, drawRows } from './helpers';
+import { setup, calcPoints, draw } from './helpers';
+import { handleEvents } from './events';
 
 export function createLineChart(
   canvas: HTMLCanvasElement,
@@ -9,9 +10,7 @@ export function createLineChart(
 ) {
   const { ctx, opt } = setup(canvas, { ...OPTIONS, ...options });
   const points = calcPoints(data, opt);
+  draw(ctx, points, opt);
 
-  drawFill(ctx, points, opt);
-  drawLine(ctx, points, opt);
-
-  drawRows(ctx, opt);
+  return handleEvents({ canvas, points, options: opt });
 }
