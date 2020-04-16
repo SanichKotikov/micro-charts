@@ -1,3 +1,5 @@
+import { IHoverData } from '../types';
+
 export interface ILineChartData<T = any> {
   readonly id: T,
   readonly value: number,
@@ -10,13 +12,7 @@ export interface IPoint {
   readonly segment: Path2D;
 }
 
-export interface ILineChartHoverData {
-  readonly data: ILineChartData;
-  readonly clientX: number;
-  readonly clientY: number;
-}
-
-export type LineChartHoverHandler = (value: ILineChartHoverData | undefined) => void;
+export type LineChartHoverHandler = (value?: IHoverData<ILineChartData>) => void;
 
 export interface ILineChartOptions {
   readonly ratio: number;

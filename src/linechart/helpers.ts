@@ -1,25 +1,7 @@
-import { ILineChartData, IPoint, ILineChartOptions, IOptions } from './types';
+import { ILineChartData, IPoint, IOptions } from './types';
 
 export function calcPadding(levelStroke: number) {
   return levelStroke / 2;
-}
-
-export function setup(
-  canvas: HTMLCanvasElement,
-  options: ILineChartOptions,
-): { ctx: CanvasRenderingContext2D, opt: IOptions } {
-  const { ratio } = options;
-  const { width, height } = canvas;
-
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-  canvas.width = width * ratio;
-  canvas.height = height * ratio;
-
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.scale(ratio, ratio);
-
-  return { ctx, opt: { ...options, width, height } };
 }
 
 export function calcPoints(
@@ -130,11 +112,13 @@ export function drawRows(ctx: CanvasRenderingContext2D, options: IOptions) {
 }
 
 export function draw(
-  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,
   points: ReadonlyArray<IPoint>,
   options: IOptions,
 ) {
   const { width, height } = options;
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
   ctx.clearRect(0, 0, width, height);
   drawFill(ctx, points, options);
   drawLine(ctx, points, options);

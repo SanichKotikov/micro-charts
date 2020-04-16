@@ -1,17 +1,19 @@
+import { IHoverData } from '../types';
+
 export interface IPieChartData<T = any> {
   readonly id: T;
   readonly percent: number;
   readonly color: string;
 }
 
-export interface IPieChartHoverData {
+export interface IPieChartSlice {
   readonly data: IPieChartData;
-  readonly clientX: number;
-  readonly clientY: number;
+  readonly path: Path2D;
+  readonly view?: Path2D;
 }
 
 export type PieChartClickHandler = (data: IPieChartData) => void;
-export type PieChartHoverHandler = (value: IPieChartHoverData | undefined) => void;
+export type PieChartHoverHandler = (value?: IHoverData<IPieChartData>) => void;
 
 export interface IPieChartOptions {
   readonly ratio: number;
@@ -28,10 +30,4 @@ export interface IPieChartTemplate {
   readonly angle: number;
   readonly radius: number;
   readonly round: number;
-}
-
-export interface IPieChartSlice {
-  readonly data: IPieChartData;
-  readonly path: Path2D;
-  readonly view?: Path2D;
 }

@@ -76,18 +76,6 @@ function getRoundedPath(
   return path;
 }
 
-export function setup(canvas: HTMLCanvasElement, options: IPieChartOptions) {
-  const { size, ratio } = options;
-
-  canvas.width = size * ratio;
-  canvas.height = size * ratio;
-  canvas.style.width = size + 'px';
-  canvas.style.height = size + 'px';
-
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.scale(ratio, ratio);
-}
-
 export function calc(
   data: ReadonlyArray<IPieChartData>,
   options: IPieChartOptions,

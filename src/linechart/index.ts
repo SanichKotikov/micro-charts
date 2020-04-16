@@ -1,16 +1,20 @@
-import { ILineChartData, ILineChartOptions } from './types';
+import { setupCanvas } from '../core';
+import { ILineChartData, ILineChartOptions, IOptions } from './types';
 import { OPTIONS } from './constants';
-import { setup, calcPoints, draw } from './helpers';
-import { handleEvents } from './events';
+import { calcPoints, draw } from './helpers';
+import { events } from './events';
 
 export function createLineChart(
   canvas: HTMLCanvasElement,
   data: ReadonlyArray<ILineChartData>,
   options: Partial<ILineChartOptions> = {},
 ) {
-  const { ctx, opt } = setup(canvas, { ...OPTIONS, ...options });
-  const points = calcPoints(data, opt);
-  draw(ctx, points, opt);
+  const { width, height } = canvas;
+  const opt: IOptions = { ...OPTIONS, ...options, width, height };
+  setupCanvas(canvas, width, height, opt.ratio);
 
-  return handleEvents({ canvas, points, options: opt });
+  const paths = calcPoints(data, opt);
+  draw(canvas, paths, opt);
+
+  return events({ canvas, paths, options: opt });
 }
