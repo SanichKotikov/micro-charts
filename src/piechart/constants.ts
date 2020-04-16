@@ -11,7 +11,7 @@ export const ROUND_STEP = 4; // %
 export const HOVER_ALPHA = 0.9;
 export const STROKE_COLOR = '#fff';
 
-export const OPTIONS: IPieChartOptions = {
+export const OPTIONS: Readonly<IPieChartOptions> = {
   ratio: window.devicePixelRatio || 1,
   size: 200,
   round: 0,

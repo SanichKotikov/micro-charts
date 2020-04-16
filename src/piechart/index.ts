@@ -6,10 +6,10 @@ import { events } from './events';
 
 export function createPieChart(
   canvas: HTMLCanvasElement,
-  data: ReadonlyArray<IPieChartData>,
-  options: Partial<IPieChartOptions> = {},
+  data: ReadonlyArray<Readonly<IPieChartData>>,
+  options: Partial<Readonly<IPieChartOptions>> = {},
 ) {
-  const opt: IPieChartOptions = { ...OPTIONS, ...options };
+  const opt: Readonly<IPieChartOptions> = { ...OPTIONS, ...options };
   setupCanvas(canvas, opt.size, opt.size, opt.ratio);
 
   const paths = calc(data, opt);

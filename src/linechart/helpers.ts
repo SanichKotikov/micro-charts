@@ -5,9 +5,9 @@ export function calcPadding(levelStroke: number) {
 }
 
 export function calcPoints(
-  data: ReadonlyArray<ILineChartData>,
-  options: IOptions,
-): ReadonlyArray<IPoint> {
+  data: ReadonlyArray<Readonly<ILineChartData>>,
+  options: Readonly<IOptions>,
+): ReadonlyArray<Readonly<IPoint>> {
   const { width, height, levelStroke, top, bottom, hoverType, onHoverChange } = options;
 
   const border = height * 5 / 100;
@@ -37,8 +37,8 @@ export function calcPoints(
 
 export function drawFill(
   ctx: CanvasRenderingContext2D,
-  points: ReadonlyArray<IPoint>,
-  options: IOptions,
+  points: ReadonlyArray<Readonly<IPoint>>,
+  options: Readonly<IOptions>,
 ) {
   const { height, width, fill } = options;
   let background: string | CanvasGradient = 'transparent';
@@ -68,8 +68,8 @@ export function drawFill(
 
 export function drawLine(
   ctx: CanvasRenderingContext2D,
-  points: ReadonlyArray<IPoint>,
-  options: IOptions,
+  points: ReadonlyArray<Readonly<IPoint>>,
+  options: Readonly<IOptions>,
 ) {
   if (options.stroke > 0) {
     ctx.beginPath();
@@ -91,7 +91,7 @@ export function drawLine(
   }
 }
 
-export function drawRows(ctx: CanvasRenderingContext2D, options: IOptions) {
+export function drawRows(ctx: CanvasRenderingContext2D, options: Readonly<IOptions>) {
   const { levelStroke, levelCount } = options;
   if (!Number.isFinite(levelCount) || levelCount <= 0 || levelStroke <= 0) return;
 
@@ -113,8 +113,8 @@ export function drawRows(ctx: CanvasRenderingContext2D, options: IOptions) {
 
 export function draw(
   canvas: HTMLCanvasElement,
-  points: ReadonlyArray<IPoint>,
-  options: IOptions,
+  points: ReadonlyArray<Readonly<IPoint>>,
+  options: Readonly<IOptions>,
 ) {
   const { width, height } = options;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;

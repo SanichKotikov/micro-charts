@@ -16,11 +16,11 @@ export function getCanvasPoint(canvas: HTMLCanvasElement, ratio: number, event: 
   return [(clientX - left) * ratio, (clientY - top) * ratio];
 }
 
-export function subscriber<P, O>(args: IArguments<P, O>) {
+export function subscriber<P, O>(args: Readonly<IArguments<P, O>>) {
   const { canvas } = args;
   return (
     event: string,
-    func: ((args: IArguments<P, O>) => void) | undefined,
+    func: ((args: Readonly<IArguments<P, O>>) => void) | undefined,
     callback: Function | undefined,
   ) => {
     const handler = callback && func && func(args);
@@ -30,7 +30,7 @@ export function subscriber<P, O>(args: IArguments<P, O>) {
 }
 
 export function handleEvents<P, O extends IEventHandlers>(
-  args: IArguments<P, O>,
+  args: Readonly<IArguments<P, O>>,
   handlers: IEventFunctions<P, O>,
 ) {
   const sub = subscriber(args);

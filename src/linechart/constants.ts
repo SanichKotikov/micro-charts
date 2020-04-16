@@ -1,6 +1,6 @@
 import { ILineChartOptions } from './types';
 
-export const OPTIONS: ILineChartOptions = {
+export const OPTIONS: Readonly<ILineChartOptions> = {
   ratio: window.devicePixelRatio || 1,
   stroke: 0.5,
   color: '#4e5098',

@@ -1,7 +1,7 @@
 export interface IArguments<P, O> {
   canvas: HTMLCanvasElement;
-  paths: ReadonlyArray<P>;
-  options: O;
+  paths: ReadonlyArray<Readonly<P>>;
+  options: Readonly<O>;
 }
 
 export interface IEventHandlers {
@@ -10,13 +10,13 @@ export interface IEventHandlers {
 }
 
 export interface IEventFunctions<P, O> {
-  clickHandler?: (args: IArguments<P, O>) => void;
-  moveHandler?: (args: IArguments<P, O>) => void;
-  leaveHandler?: (args: IArguments<P, O>) => void;
+  clickHandler?: (args: Readonly<IArguments<P, O>>) => void;
+  moveHandler?: (args: Readonly<IArguments<P, O>>) => void;
+  leaveHandler?: (args: Readonly<IArguments<P, O>>) => void;
 }
 
 export interface IHoverData<T> {
-  readonly data: T;
-  readonly clientX: number;
-  readonly clientY: number;
+  data: Readonly<T>;
+  clientX: number;
+  clientY: number;
 }

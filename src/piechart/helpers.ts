@@ -25,9 +25,9 @@ function getArcPoint(center: number, radius: number, angle: number) {
 }
 
 function calcTemplate(
-  data: ReadonlyArray<IPieChartData>,
-  options: IPieChartOptions,
-): ReadonlyArray<IPieChartTemplate> {
+  data: ReadonlyArray<Readonly<IPieChartData>>,
+  options: Readonly<IPieChartOptions>,
+): ReadonlyArray<Readonly<IPieChartTemplate>> {
   const center = options.size / 2;
 
   const rStep = options.variable
@@ -51,7 +51,7 @@ function calcTemplate(
 
 function getRoundedPath(
   center: number,
-  tpl: IPieChartTemplate,
+  tpl: Readonly<IPieChartTemplate>,
   start: number,
   end: number,
 ): Readonly<Path2D> {
@@ -77,9 +77,9 @@ function getRoundedPath(
 }
 
 export function calc(
-  data: ReadonlyArray<IPieChartData>,
-  options: IPieChartOptions,
-): ReadonlyArray<IPieChartSlice> {
+  data: ReadonlyArray<Readonly<IPieChartData>>,
+  options: Readonly<IPieChartOptions>,
+): ReadonlyArray<Readonly<IPieChartSlice>> {
   const center = options.size / 2;
 
   if (data.length === 1) {
@@ -112,9 +112,9 @@ export function calc(
 
 export function draw(
   canvas: HTMLCanvasElement,
-  slices: ReadonlyArray<IPieChartSlice>,
-  options: IPieChartOptions,
-  handler?: (ctx: CanvasRenderingContext2D, path: Path2D, data: IPieChartData) => void,
+  slices: ReadonlyArray<Readonly<IPieChartSlice>>,
+  options: Readonly<IPieChartOptions>,
+  handler?: (ctx: CanvasRenderingContext2D, path: Path2D, data: Readonly<IPieChartData>) => void,
 ) {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);

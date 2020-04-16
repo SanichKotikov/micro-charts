@@ -6,11 +6,11 @@ import { events } from './events';
 
 export function createLineChart(
   canvas: HTMLCanvasElement,
-  data: ReadonlyArray<ILineChartData>,
-  options: Partial<ILineChartOptions> = {},
+  data: ReadonlyArray<Readonly<ILineChartData>>,
+  options: Partial<Readonly<ILineChartOptions>> = {},
 ) {
   const { width, height } = canvas;
-  const opt: IOptions = { ...OPTIONS, ...options, width, height };
+  const opt: Readonly<IOptions> = { ...OPTIONS, ...options, width, height };
   setupCanvas(canvas, width, height, opt.ratio);
 
   const paths = calcPoints(data, opt);

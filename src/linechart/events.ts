@@ -3,7 +3,7 @@ import { IArguments } from '../types';
 import { ILineChartData, IPoint, IOptions } from './types';
 import { draw } from './helpers';
 
-function moveHandler(args: IArguments<IPoint, IOptions>) {
+function moveHandler(args: Readonly<IArguments<IPoint, IOptions>>) {
   const canvas = args.canvas;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   const { ratio, hoverColor, onHoverChange } = args.options;
@@ -13,7 +13,7 @@ function moveHandler(args: IArguments<IPoint, IOptions>) {
     const [cX, cY] = getCanvasPoint(canvas, ratio, event);
     draw(canvas, args.paths, args.options);
 
-    let found: ILineChartData | undefined;
+    let found: Readonly<ILineChartData> | undefined;
     const length = args.paths.length - (args.options.hoverType === 'point' ? 1 : 0);
 
     for (let i = 1; i < length; i++) {
@@ -32,7 +32,7 @@ function moveHandler(args: IArguments<IPoint, IOptions>) {
   };
 }
 
-function leaveHandler(args: IArguments<IPoint, IOptions>) {
+function leaveHandler(args: Readonly<IArguments<IPoint, IOptions>>) {
   const canvas = args.canvas;
   const { onHoverChange } = args.options;
 
@@ -42,6 +42,6 @@ function leaveHandler(args: IArguments<IPoint, IOptions>) {
   };
 }
 
-export function events(args: IArguments<IPoint, IOptions>) {
+export function events(args: Readonly<IArguments<IPoint, IOptions>>) {
   return handleEvents(args, { moveHandler, leaveHandler });
 }
