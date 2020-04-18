@@ -1,4 +1,4 @@
-import { IArguments, IEventHandlers, IEventFunctions } from './types';
+import { IPathData, IArguments, IEventHandlers, IEventFunctions } from './types';
 
 export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
   canvas.style.width = width + 'px';
@@ -16,7 +16,7 @@ export function getCanvasPoint(canvas: HTMLCanvasElement, ratio: number, event: 
   return [(clientX - left) * ratio, (clientY - top) * ratio];
 }
 
-export function subscriber<P, O>(args: Readonly<IArguments<P, O>>) {
+export function subscriber<P extends IPathData, O extends IEventHandlers>(args: Readonly<IArguments<P, O>>) {
   const { canvas } = args;
   return (
     event: string,
@@ -29,16 +29,51 @@ export function subscriber<P, O>(args: Readonly<IArguments<P, O>>) {
   };
 }
 
-export function handleEvents<P, O extends IEventHandlers>(
+function clickHandler<P extends IPathData, O extends IEventHandlers>(args: Readonly<IArguments<P, O>>) {
+  const canvas = args.canvas;
+  const { ratio, onClick } = args.options;
+
+  return (event: MouseEvent) => {
+    if (!onClick) return;
+
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    const [cX, cY] = getCanvasPoint(canvas, ratio, event);
+
+    for (let i = 0; i < args.paths.length; i++) {
+      const { path, data } = args.paths[i];
+
+      if (ctx.isPointInPath(path, cX, cY)) {
+        onClick(data);
+        return;
+      }
+    }
+  };
+}
+
+function leaveHandler(drawFunc: Function) {
+  return <P extends IPathData, O extends IEventHandlers>(args: Readonly<IArguments<P, O>>) => {
+    const canvas = args.canvas;
+    const { onClick, onHoverChange } = args.options;
+
+    return () => {
+      drawFunc(canvas, args.paths, args.options);
+      if (onHoverChange) onHoverChange(undefined);
+      if (onClick) canvas.style.cursor = 'default';
+    }
+  }
+}
+
+export function handleEvents<P extends IPathData, O extends IEventHandlers>(
   args: Readonly<IArguments<P, O>>,
+  drawFunc: Function,
   handlers: IEventFunctions<P, O>,
 ) {
   const sub = subscriber(args);
   const { onClick, onHoverChange } = args.options;
 
-  const unsubClick = sub('click', handlers.clickHandler, onClick);
+  const unsubClick = sub('click', clickHandler, onClick);
   const unsubMove = sub('mousemove', handlers.moveHandler, onHoverChange);
-  const unsubLeave = sub('mouseleave', handlers.leaveHandler, onHoverChange);
+  const unsubLeave = sub('mouseleave', leaveHandler(drawFunc), onHoverChange);
 
   return () => {
     unsubClick();

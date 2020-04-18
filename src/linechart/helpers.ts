@@ -8,7 +8,7 @@ export function calcPoints(
   data: ReadonlyArray<Readonly<ILineChartData>>,
   options: Readonly<IOptions>,
 ): ReadonlyArray<Readonly<IPoint>> {
-  const { width, height, levelStroke, top, bottom, hoverType, onHoverChange } = options;
+  const { width, height, levelStroke, top, bottom, hoverType, onClick, onHoverChange } = options;
 
   const border = height * 5 / 100;
   const padding = calcPadding(levelStroke);
@@ -23,15 +23,15 @@ export function calcPoints(
   return data.map((item, i) => {
     const x = i * W;
     const y = (upper - item.value) * H + padding + border;
-    const segment = new Path2D();
+    const path = new Path2D();
 
-    if (onHoverChange) {
+    if (onClick || onHoverChange) {
       hoverType === 'segment'
-        ? segment.rect((i - 1) * W, 0, W, height)
-        : segment.arc(x, y, options.pointRadius * 6, 0, Math.PI * 2);
+        ? path.rect((i - 1) * W, 0, W, height)
+        : path.arc(x, y, options.pointRadius * 6, 0, Math.PI * 2);
     }
 
-    return { data: item, x, y, segment };
+    return { data: item, x, y, path };
   });
 }
 

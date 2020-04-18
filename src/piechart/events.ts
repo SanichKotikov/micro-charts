@@ -4,27 +4,6 @@ import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
 import { HOVER_ALPHA } from './constants';
 import { draw } from './helpers';
 
-function clickHandler(args: Readonly<IArguments<IPieChartSlice, IPieChartOptions>>) {
-  const canvas = args.canvas;
-  const { ratio, onClick } = args.options;
-
-  return (event: MouseEvent) => {
-    if (!onClick) return;
-
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    const [cX, cY] = getCanvasPoint(canvas, ratio, event);
-
-    for (let i = 0; i < args.paths.length; i++) {
-      const { path, data } = args.paths[i];
-
-      if (ctx.isPointInPath(path, cX, cY)) {
-        onClick(data);
-        return;
-      }
-    }
-  };
-}
-
 function moveHandler(args: Readonly<IArguments<IPieChartSlice, IPieChartOptions>>) {
   const canvas = args.canvas;
   const { ratio, onClick, onHoverChange } = args.options;
@@ -52,17 +31,6 @@ function moveHandler(args: Readonly<IArguments<IPieChartSlice, IPieChartOptions>
   };
 }
 
-function leaveHandler(args: Readonly<IArguments<IPieChartSlice, IPieChartOptions>>) {
-  const canvas = args.canvas;
-  const { onClick, onHoverChange } = args.options;
-
-  return () => {
-    draw(canvas, args.paths, args.options);
-    if (onHoverChange) onHoverChange(undefined);
-    if (onClick) canvas.style.cursor = 'default';
-  }
-}
-
 export function events(args: Readonly<IArguments<IPieChartSlice, IPieChartOptions>>) {
-  return handleEvents(args, { clickHandler, moveHandler, leaveHandler });
+  return handleEvents(args, draw, { moveHandler });
 }

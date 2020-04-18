@@ -1,4 +1,4 @@
-import { IHoverData } from '../types';
+import { IPathData, IHoverData, IEventHandlers } from '../types';
 
 export interface IPieChartData<T = any> {
   id: T;
@@ -6,23 +6,18 @@ export interface IPieChartData<T = any> {
   color: string;
 }
 
-export interface IPieChartSlice {
-  data: Readonly<IPieChartData>;
-  path: Path2D;
+export interface IPieChartSlice extends IPathData<IPieChartData> {
   view?: Path2D;
 }
 
-export type PieChartClickHandler = (data: Readonly<IPieChartData>) => void;
-export type PieChartHoverHandler = (value?: IHoverData<Readonly<IPieChartData>>) => void;
+export type PieChartClickHandler = <T>(data: Readonly<IPieChartData<T>>) => void;
+export type PieChartHoverHandler = <T>(value?: IHoverData<Readonly<IPieChartData<T>>>) => void;
 
-export interface IPieChartOptions {
-  ratio: number;
+export interface IPieChartOptions extends IEventHandlers<PieChartClickHandler, PieChartHoverHandler> {
   size: number;
   round: number;
   variable: boolean;
   stroke: number;
-  onClick?: PieChartClickHandler;
-  onHoverChange?: PieChartHoverHandler;
 }
 
 export interface IPieChartTemplate {

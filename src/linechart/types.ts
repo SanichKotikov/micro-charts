@@ -1,21 +1,19 @@
-import { IHoverData } from '../types';
+import { IPathData, IHoverData, IEventHandlers } from '../types';
 
 export interface ILineChartData<T = any> {
   id: T,
   value: number,
 }
 
-export interface IPoint {
-  data: Readonly<ILineChartData>;
+export interface IPoint extends IPathData<ILineChartData> {
   x: number;
   y: number;
-  segment: Path2D;
 }
 
-export type LineChartHoverHandler = (value?: IHoverData<Readonly<ILineChartData>>) => void;
+export type LineChartClickHandler = <T>(data: Readonly<ILineChartData<T>>) => void;
+export type LineChartHoverHandler = <T>(value?: IHoverData<Readonly<ILineChartData<T>>>) => void;
 
-export interface ILineChartOptions {
-  ratio: number;
+export interface ILineChartOptions extends IEventHandlers<LineChartClickHandler, LineChartHoverHandler> {
   stroke: number;
   color: string;
   fill: string | ReadonlyArray<string>;
@@ -27,7 +25,6 @@ export interface ILineChartOptions {
   bottom?: number;
   hoverType: 'point' | 'segment';
   hoverColor: string;
-  onHoverChange?: LineChartHoverHandler;
 }
 
 export interface IOptions extends ILineChartOptions {
