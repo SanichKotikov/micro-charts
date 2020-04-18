@@ -1,3 +1,4 @@
+import { IParams } from '../types';
 import {
   IPieChartData,
   IPieChartOptions,
@@ -12,6 +13,12 @@ import {
   ROUND_STEP,
   STROKE_COLOR,
 } from './constants';
+
+export function adjustColor(color: string, amount: number) {
+  return '#' + color.replace(/^#/, '').replace(/../g, (color) => {
+    return ('0' + Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2);
+  });
+}
 
 function getArcAngle(percent: number) {
   return percent * CIRCLE / 100 /* % */;
@@ -97,36 +104,33 @@ export function calc(
     if (!tpl) throw new Error();
     const end = start + tpl.angle;
 
-    const path = new Path2D();
-    path.moveTo(center, center);
-    path.arc(center, center, tpl.radius, start, end);
-    path.closePath();
+    let path = new Path2D();
 
-    const view = options.round ? getRoundedPath(center, tpl, start, end) : undefined;
-    const result = { data: item, path, view };
+    if (!options.round) {
+      path.moveTo(center, center);
+      path.arc(center, center, tpl.radius, start, end);
+      path.closePath();
+    } else {
+      path = getRoundedPath(center, tpl, start, end);
+    }
 
     start = end;
-    return result;
+    return { data: item, path };
   });
 }
 
-export function draw(
-  canvas: HTMLCanvasElement,
-  slices: ReadonlyArray<Readonly<IPieChartSlice>>,
-  options: Readonly<IPieChartOptions>,
-  handler?: (ctx: CanvasRenderingContext2D, path: Path2D, data: Readonly<IPieChartData>) => void,
-) {
+export function draw(params: Readonly<IParams<IPieChartSlice, IPieChartOptions>>) {
+  const { canvas, paths, options } = params;
+
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.globalAlpha = 1;
   ctx.lineWidth = options.stroke;
   ctx.strokeStyle = STROKE_COLOR;
 
-  slices.forEach((item) => {
+  paths.forEach((item) => {
     ctx.fillStyle = item.data.color;
-    if (handler) handler(ctx, item.path, item.data);
-    const path = item.view || item.path;
-    ctx.fill(path);
-    if (options.stroke > 0) ctx.stroke(path);
+    ctx.fill(item.path);
+    if (options.stroke > 0) ctx.stroke(item.path);
   });
 }

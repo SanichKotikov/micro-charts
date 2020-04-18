@@ -1,3 +1,4 @@
+import { IParams } from '../types';
 import { ILineChartData, IPoint, IOptions } from './types';
 
 export function calcPadding(levelStroke: number) {
@@ -111,16 +112,14 @@ export function drawRows(ctx: CanvasRenderingContext2D, options: Readonly<IOptio
   }
 }
 
-export function draw(
-  canvas: HTMLCanvasElement,
-  points: ReadonlyArray<Readonly<IPoint>>,
-  options: Readonly<IOptions>,
-) {
+export function draw(params: IParams<IPoint, IOptions>) {
+  const { canvas, paths, options } = params;
+
   const { width, height } = options;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
   ctx.clearRect(0, 0, width, height);
-  drawFill(ctx, points, options);
-  drawLine(ctx, points, options);
+  drawFill(ctx, paths, options);
+  drawLine(ctx, paths, options);
   drawRows(ctx, options);
 }

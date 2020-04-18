@@ -1,8 +1,8 @@
-import { setupCanvas } from '../core';
-import { IPieChartData, IPieChartOptions } from './types';
+import { IParams } from '../types';
+import { setupCanvas, setupEvents } from '../core';
+import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
 import { OPTIONS } from './constants';
-import { calc, draw } from './helpers';
-import { events } from './events';
+import { adjustColor, calc, draw } from './helpers';
 
 export function createPieChart(
   canvas: HTMLCanvasElement,
@@ -13,7 +13,12 @@ export function createPieChart(
   setupCanvas(canvas, opt.size, opt.size, opt.ratio);
 
   const paths = calc(data, opt);
-  draw(canvas, paths, opt);
+  const params: IParams<IPieChartSlice, IPieChartOptions> = { canvas, paths, options: opt };
 
-  return events({ canvas, paths, options: opt });
+  draw(params);
+
+  return setupEvents(params, draw, () => ({
+    items: paths,
+    fill: (color = '#000000') => adjustColor(color, 10),
+  }));
 }

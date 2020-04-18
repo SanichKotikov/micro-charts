@@ -1,8 +1,8 @@
-import { setupCanvas } from '../core';
-import { ILineChartData, ILineChartOptions, IOptions } from './types';
+import { IParams } from '../types';
+import { setupCanvas, setupEvents } from '../core';
+import { ILineChartData, IPoint, ILineChartOptions, IOptions } from './types';
 import { OPTIONS } from './constants';
 import { calcPoints, draw } from './helpers';
-import { events } from './events';
 
 export function createLineChart(
   canvas: HTMLCanvasElement,
@@ -14,7 +14,12 @@ export function createLineChart(
   setupCanvas(canvas, width, height, opt.ratio);
 
   const paths = calcPoints(data, opt);
-  draw(canvas, paths, opt);
+  const params: IParams<IPoint, IOptions> = { canvas, paths, options: opt };
 
-  return events({ canvas, paths, options: opt });
+  draw(params);
+
+  return setupEvents(params, draw, () => ({
+    items: paths.slice(1, paths.length - (opt.hoverType === 'point' ? 1 : 0)),
+    fill: () => opt.hoverColor,
+  }));
 }

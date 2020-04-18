@@ -1,7 +1,7 @@
 import { IPathData, IHoverData, IEventHandlers } from '../types';
 
-export interface ILineChartData<T = any> {
-  id: T,
+export interface ILineChartData {
+  id: string,
   value: number,
 }
 
@@ -10,8 +10,8 @@ export interface IPoint extends IPathData<ILineChartData> {
   y: number;
 }
 
-export type LineChartClickHandler = <T>(data: Readonly<ILineChartData<T>>) => void;
-export type LineChartHoverHandler = <T>(value?: IHoverData<Readonly<ILineChartData<T>>>) => void;
+export type LineChartClickHandler = (data: Readonly<ILineChartData>) => void;
+export type LineChartHoverHandler = (value?: IHoverData<Readonly<ILineChartData>>) => void;
 
 export interface ILineChartOptions extends IEventHandlers<LineChartClickHandler, LineChartHoverHandler> {
   stroke: number;

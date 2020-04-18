@@ -9,14 +9,15 @@ export interface IEventHandlers<C = Function, H = Function> {
   onHoverChange?: H;
 }
 
-export interface IArguments<P extends IPathData, O extends IEventHandlers> {
+export interface IParams<P extends IPathData, O extends IEventHandlers> {
   canvas: HTMLCanvasElement;
   paths: ReadonlyArray<Readonly<P>>;
   options: Readonly<O>;
 }
 
-export interface IEventFunctions<P extends IPathData, O extends IEventHandlers> {
-  moveHandler?: (args: Readonly<IArguments<P, O>>) => void;
+export interface IHoverRenderData<P extends IPathData> {
+  items: ReadonlyArray<Readonly<P>>;
+  fill: (color?: string) => string;
 }
 
 export interface IHoverData<T> {

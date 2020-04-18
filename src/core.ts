@@ -1,4 +1,4 @@
-import { IPathData, IArguments, IEventHandlers, IEventFunctions } from './types';
+import { IPathData, IParams, IEventHandlers, IHoverRenderData } from './types';
 
 export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
   canvas.style.width = width + 'px';
@@ -16,22 +16,22 @@ export function getCanvasPoint(canvas: HTMLCanvasElement, ratio: number, event: 
   return [(clientX - left) * ratio, (clientY - top) * ratio];
 }
 
-export function subscriber<P extends IPathData, O extends IEventHandlers>(args: Readonly<IArguments<P, O>>) {
-  const { canvas } = args;
+export function subscriber<P extends IPathData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
+  const { canvas } = params;
   return (
     event: string,
-    func: ((args: Readonly<IArguments<P, O>>) => void) | undefined,
+    func: ((params: Readonly<IParams<P, O>>) => void) | undefined,
     callback: Function | undefined,
   ) => {
-    const handler = callback && func && func(args);
+    const handler = callback && func && func(params);
     if (handler) canvas.addEventListener(event, handler);
     return () => handler && canvas.removeEventListener(event, handler);
   };
 }
 
-function clickHandler<P extends IPathData, O extends IEventHandlers>(args: Readonly<IArguments<P, O>>) {
-  const canvas = args.canvas;
-  const { ratio, onClick } = args.options;
+function clickHandler<P extends IPathData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
+  const canvas = params.canvas;
+  const { ratio, onClick } = params.options;
 
   return (event: MouseEvent) => {
     if (!onClick) return;
@@ -39,8 +39,8 @@ function clickHandler<P extends IPathData, O extends IEventHandlers>(args: Reado
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     const [cX, cY] = getCanvasPoint(canvas, ratio, event);
 
-    for (let i = 0; i < args.paths.length; i++) {
-      const { path, data } = args.paths[i];
+    for (let i = 0; i < params.paths.length; i++) {
+      const { path, data } = params.paths[i];
 
       if (ctx.isPointInPath(path, cX, cY)) {
         onClick(data);
@@ -50,29 +50,69 @@ function clickHandler<P extends IPathData, O extends IEventHandlers>(args: Reado
   };
 }
 
-function leaveHandler(drawFunc: Function) {
-  return <P extends IPathData, O extends IEventHandlers>(args: Readonly<IArguments<P, O>>) => {
-    const canvas = args.canvas;
-    const { onClick, onHoverChange } = args.options;
+function moveHandler<P extends IPathData, O extends IEventHandlers>(
+  drawFunc: (params: Readonly<IParams<P, O>>) => void,
+  getData: () => IHoverRenderData<P>,
+) {
+  return (params: Readonly<IParams<P, O>>) => {
+    const canvas = params.canvas;
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    const { ratio, onClick, onHoverChange } = params.options;
+
+    return (event: MouseEvent) => {
+      if (!onHoverChange) return;
+
+      let cursor: string = 'default';
+      let found: Readonly<any> | undefined;
+      const [cX, cY] = getCanvasPoint(canvas, ratio, event);
+      drawFunc(params);
+
+      const { items, fill } = getData();
+
+      for (let i = 0; i < items.length; i++) {
+        const { data, path } = items[i];
+
+        if (ctx.isPointInPath(path, cX, cY)) {
+          ctx.fillStyle = fill(data.color);
+          ctx.fill(path);
+          cursor = 'pointer';
+          found = data;
+          break;
+        }
+      }
+
+      const { clientX, clientY } = event;
+      onHoverChange(found && { data: found, clientX, clientY });
+      if (onClick) canvas.style.cursor = cursor;
+    };
+  }
+}
+
+function leaveHandler<P extends IPathData, O extends IEventHandlers>(
+  drawFunc: (params: Readonly<IParams<P, O>>) => void,
+) {
+  return (params: Readonly<IParams<P, O>>) => {
+    const canvas = params.canvas;
+    const { onClick, onHoverChange } = params.options;
 
     return () => {
-      drawFunc(canvas, args.paths, args.options);
+      drawFunc(params);
       if (onHoverChange) onHoverChange(undefined);
       if (onClick) canvas.style.cursor = 'default';
     }
   }
 }
 
-export function handleEvents<P extends IPathData, O extends IEventHandlers>(
-  args: Readonly<IArguments<P, O>>,
-  drawFunc: Function,
-  handlers: IEventFunctions<P, O>,
+export function setupEvents<P extends IPathData, O extends IEventHandlers>(
+  params: Readonly<IParams<P, O>>,
+  drawFunc: (params: Readonly<IParams<P, O>>) => void,
+  getData: () => IHoverRenderData<P>,
 ) {
-  const sub = subscriber(args);
-  const { onClick, onHoverChange } = args.options;
+  const sub = subscriber(params);
+  const { onClick, onHoverChange } = params.options;
 
   const unsubClick = sub('click', clickHandler, onClick);
-  const unsubMove = sub('mousemove', handlers.moveHandler, onHoverChange);
+  const unsubMove = sub('mousemove', moveHandler(drawFunc, getData), onHoverChange);
   const unsubLeave = sub('mouseleave', leaveHandler(drawFunc), onHoverChange);
 
   return () => {
