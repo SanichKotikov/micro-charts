@@ -2,8 +2,8 @@
 
 A tiny library for visualizing your data. With zero dependencies.
 
-- LineCharts (~774 B)
-- PieCharts (~1.19 KB)
+- LineCharts (~1.75 KB)
+- PieCharts (~1.36 KB)
 
 \* Minified and gzipped (by [Size Limit](https://github.com/ai/size-limit))
 

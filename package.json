@@ -1,6 +1,6 @@
 {
   "name": "micro-charts",
-  "version": "0.5.1",
+  "version": "1.0.0",
   "description": "A tiny library for visualizing your data",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -24,6 +24,7 @@
   "keywords": [
     "charts",
     "piechart",
+    "linechart",
     "chart",
     "pie",
     "graph"
@@ -49,5 +50,5 @@
       "path": "lib/index.js"
     }
   ],
-  "homepage": "https://github.com/SanichKotikov/micro-charts"
+  "homepage": "https://sanichkotikov.github.io/micro-charts/"
 }

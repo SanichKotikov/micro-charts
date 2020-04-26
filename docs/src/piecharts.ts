@@ -1,7 +1,5 @@
-import { getCanvas, getRandomData } from './helpers';
+import { getCanvas } from './helpers';
 import { createPieChart } from '../../src/piechart';
-
-console.log(getRandomData(5));
 
 const pieChartData = [
   { id: '1', percent: 45, color: '#4CAF50' },
