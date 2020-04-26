@@ -1,5 +1,9 @@
 import { IPathData, IParams, IEventHandlers, IHoverRenderData } from './types';
 
+export function pipe(...fus: Function[]) {
+  return <T>(init: T) => fus.reduce((res, fn) => fn(res), init);
+}
+
 export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
   canvas.style.width = width + 'px';
   canvas.style.height = height + 'px';
@@ -8,6 +12,11 @@ export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: nu
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.scale(ratio, ratio);
+}
+
+export function clearCanvas(canvas: HTMLCanvasElement, width: number, height: number) {
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  ctx.clearRect(0, 0, width, height);
 }
 
 export function getCanvasPoint(canvas: HTMLCanvasElement, ratio: number, event: MouseEvent) {

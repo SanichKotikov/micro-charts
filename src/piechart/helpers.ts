@@ -1,3 +1,4 @@
+import { clearCanvas } from '../core';
 import { IParams } from '../types';
 import {
   IPieChartData,
@@ -121,10 +122,10 @@ export function calc(
 
 export function draw(params: Readonly<IParams<IPieChartSlice, IPieChartOptions>>) {
   const { canvas, paths, options } = params;
+  clearCanvas(canvas, canvas.width, canvas.height);
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.globalAlpha = 1;
+
   ctx.lineWidth = options.stroke;
   ctx.strokeStyle = STROKE_COLOR;
 

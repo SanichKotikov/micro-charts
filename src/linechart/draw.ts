@@ -1,11 +1,6 @@
+import { pipe, clearCanvas } from '../core';
 import { IParams } from '../types';
 import { IPoint, IOptions } from './types';
-
-function clear(params: IParams<IPoint, IOptions>) {
-  const { canvas, options: { width, height } } = params;
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.clearRect(0, 0, width, height);
-}
 
 function fill(params: IParams<IPoint, IOptions>) {
   const { canvas, paths, options } = params;
@@ -35,6 +30,8 @@ function fill(params: IParams<IPoint, IOptions>) {
   ctx.closePath();
   ctx.fillStyle = background;
   ctx.fill();
+
+  return params;
 }
 
 function line(params: IParams<IPoint, IOptions>) {
@@ -59,6 +56,8 @@ function line(params: IParams<IPoint, IOptions>) {
       }
     });
   }
+
+  return params;
 }
 
 function rows(params: IParams<IPoint, IOptions>) {
@@ -66,7 +65,7 @@ function rows(params: IParams<IPoint, IOptions>) {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
   const { levelStroke, levelCount } = options;
-  if (!Number.isFinite(levelCount) || levelCount <= 0 || levelStroke <= 0) return;
+  if (!Number.isFinite(levelCount) || levelCount <= 0 || levelStroke <= 0) return params;
 
   const { width, height, top, bottom, sPadding, vPadding, levelColor, levelFont } = options;
   const count = Math.ceil(levelCount);
@@ -91,11 +90,12 @@ function rows(params: IParams<IPoint, IOptions>) {
       ctx.fillText(label, 0, y + ((actualBoundingBoxAscent - levelStroke / 2) / 2));
     }
   }
+
+  return params;
 }
 
 export function draw(params: IParams<IPoint, IOptions>) {
-  clear(params);
-  fill(params);
-  line(params);
-  rows(params);
+  const { canvas, options: { width, height } } = params;
+  clearCanvas(canvas, width, height);
+  pipe(fill, line, rows)(params);
 }
