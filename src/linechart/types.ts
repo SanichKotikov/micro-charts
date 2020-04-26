@@ -5,6 +5,16 @@ export interface ILineChartData {
   value: number,
 }
 
+export interface IPadding {
+  sPadding: number;
+  vPadding: number;
+}
+
+export interface IEdges {
+  top: number;
+  bottom: number;
+}
+
 export interface IPoint extends IPathData<ILineChartData> {
   x: number;
   y: number;
@@ -21,13 +31,16 @@ export interface ILineChartOptions extends IEventHandlers<LineChartClickHandler,
   levelCount: number;
   levelStroke: number;
   levelColor: string;
+  levelFont?: string;
   top?: number;
   bottom?: number;
   hoverType: 'point' | 'segment';
   hoverColor: string;
 }
 
-export interface IOptions extends ILineChartOptions {
+export interface IOptions extends ILineChartOptions, IPadding {
   width: number;
   height: number;
+  top: number;
+  bottom: number;
 }
