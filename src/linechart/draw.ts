@@ -1,5 +1,5 @@
-import { pipe, clearCanvas } from '../core';
 import { IParams } from '../types';
+import { pipe, clearCanvas, drawLevels } from '../core';
 import { IPoint, IOptions } from './types';
 
 function fill(params: IParams<IPoint, IOptions>) {
@@ -60,42 +60,8 @@ function line(params: IParams<IPoint, IOptions>) {
   return params;
 }
 
-function rows(params: IParams<IPoint, IOptions>) {
-  const { canvas, options } = params;
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-
-  const { levelStroke, levelCount } = options;
-  if (!Number.isFinite(levelCount) || levelCount <= 0 || levelStroke <= 0) return params;
-
-  const { width, height, top, bottom, sPadding, vPadding, levelColor, levelFont } = options;
-  const count = Math.ceil(levelCount);
-  const L = (height - vPadding * 2) / count;
-
-  const step = (top - bottom) / count;
-
-  for (let i = 0; i < count + 1; i++) {
-    const y = (i * L) + vPadding;
-    ctx.beginPath();
-    ctx.moveTo(sPadding, y);
-    ctx.lineTo(width, y);
-    ctx.lineWidth = levelStroke;
-    ctx.strokeStyle = levelColor;
-    ctx.stroke();
-
-    if (levelFont) {
-      ctx.font = levelFont;
-      const label = Math.round(top - (step * i)).toString();
-      const { actualBoundingBoxAscent } = ctx.measureText(label);
-      ctx.fillStyle = levelColor;
-      ctx.fillText(label, 0, y + ((actualBoundingBoxAscent - levelStroke / 2) / 2));
-    }
-  }
-
-  return params;
-}
-
 export function draw(params: IParams<IPoint, IOptions>) {
   const { canvas, options: { width, height } } = params;
   clearCanvas(canvas, width, height);
-  pipe(fill, line, rows)(params);
+  pipe(fill, line, drawLevels)(params);
 }

@@ -1,7 +1,50 @@
-import { IPathData, IParams, IEventHandlers, IHoverRenderData } from './types';
+import {
+  IPathData,
+  IParams,
+  IPadding,
+  IEdges,
+  IEventHandlers,
+  IDrawLevelOptions,
+  IHoverRenderData,
+} from './types';
 
 export function pipe(...fus: Function[]) {
   return <T>(init: T) => fus.reduce((res, fn) => fn(res), init);
+}
+
+export function calcEdges(values: number[], top?: number, bottom?: number): Readonly<IEdges> {
+  let upper = top ?? Math.max.apply(null, values);
+  let lower = bottom ?? Math.min.apply(null, values);
+  const shift = (upper - lower) * 5 / 100;
+
+  if (typeof top !== 'number') upper = Math.ceil(upper + shift);
+  if (typeof bottom !== 'number') lower = Math.floor(lower - shift)
+
+  return { top: upper, bottom: lower };
+}
+
+export function calcPadding(
+  canvas: HTMLCanvasElement,
+  edges: IEdges,
+  levelStroke: number,
+  levelFont?: string,
+): Readonly<IPadding> {
+  const stroke = levelStroke / 2;
+  if (!levelFont) return { sPadding: 0, vPadding: stroke };
+
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  ctx.font = levelFont;
+
+  const labels = [edges.top, edges.bottom]
+    .map(num => Math.round(num).toString())
+    .sort((a, b) => b.length - a.length);
+
+  const { actualBoundingBoxAscent, width } = ctx.measureText(labels[0]);
+
+  return {
+    sPadding: Math.ceil(width + 2), // font width, plus 2px
+    vPadding: Math.max(stroke, actualBoundingBoxAscent / 2),
+  };
 }
 
 export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
@@ -17,6 +60,41 @@ export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: nu
 export function clearCanvas(canvas: HTMLCanvasElement, width: number, height: number) {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.clearRect(0, 0, width, height);
+}
+
+export function drawLevels<O extends IDrawLevelOptions>(params: IParams<any, O>) {
+  const { canvas, options } = params;
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+  const { levelStroke, levelCount } = options;
+  if (!Number.isFinite(levelCount) || levelCount <= 0 || levelStroke <= 0) return params;
+
+  const { width, height, top, bottom, sPadding, vPadding, levelColor, levelFont } = options;
+  const count = Math.ceil(levelCount);
+  const L = (height - vPadding * 2) / count;
+
+  const step = (top - bottom) / count;
+
+  for (let i = 0; i < count + 1; i++) {
+    const y = (i * L) + vPadding;
+
+    ctx.beginPath();
+    ctx.moveTo(sPadding, y);
+    ctx.lineTo(width, y);
+    ctx.lineWidth = levelStroke;
+    ctx.strokeStyle = levelColor;
+    ctx.stroke();
+
+    if (typeof levelFont === 'string') {
+      ctx.font = levelFont;
+      const label = Math.round(top - (step * i)).toString();
+      const { actualBoundingBoxAscent } = ctx.measureText(label);
+      ctx.fillStyle = levelColor;
+      ctx.fillText(label, 0, y + ((actualBoundingBoxAscent - levelStroke / 2) / 2));
+    }
+  }
+
+  return params;
 }
 
 export function getCanvasPoint(canvas: HTMLCanvasElement, ratio: number, event: MouseEvent) {

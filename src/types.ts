@@ -15,6 +15,35 @@ export interface IParams<P extends IPathData, O extends IEventHandlers> {
   options: Readonly<O>;
 }
 
+export interface ISize {
+  width: number;
+  height: number;
+}
+
+export interface IPadding {
+  sPadding: number;
+  vPadding: number;
+}
+
+export interface IEdges {
+  top: number;
+  bottom: number;
+}
+
+export interface ILevelOptions {
+  top?: number;
+  bottom?: number;
+  levelCount: number;
+  levelStroke: number;
+  levelColor: string;
+  levelFont?: string;
+}
+
+export interface IDrawLevelOptions extends IEventHandlers, ILevelOptions, ISize, IPadding {
+  top: number;
+  bottom: number;
+}
+
 export interface IHoverRenderData<P extends IPathData> {
   items: ReadonlyArray<Readonly<P>>;
   fill: (color?: string) => string;

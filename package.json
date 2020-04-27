@@ -44,6 +44,9 @@
       "path": "lib/linechart/index.js"
     },
     {
+      "path": "lib/barchart/index.js"
+    },
+    {
       "path": "lib/piechart/index.js"
     },
     {
