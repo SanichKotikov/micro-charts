@@ -1,6 +1,6 @@
 {
   "name": "micro-charts",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A tiny library for visualizing your data",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -40,18 +40,10 @@
     "typescript": "3.8.3"
   },
   "size-limit": [
-    {
-      "path": "lib/linechart/index.js"
-    },
-    {
-      "path": "lib/barchart/index.js"
-    },
-    {
-      "path": "lib/piechart/index.js"
-    },
-    {
-      "path": "lib/index.js"
-    }
+    { "path": "lib/linechart/index.js" },
+    { "path": "lib/barchart/index.js" },
+    { "path": "lib/piechart/index.js" },
+    { "path": "lib/index.js" }
   ],
   "homepage": "https://sanichkotikov.github.io/micro-charts/"
 }
