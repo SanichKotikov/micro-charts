@@ -10,8 +10,8 @@ export interface IPoint extends IPathData<ILineChartData> {
   y: number;
 }
 
-type LineChartClickHandler = (data: Readonly<ILineChartData>) => void;
-type LineChartHoverHandler = (value?: IHoverData<Readonly<ILineChartData>>) => void;
+export type LineChartClickHandler = (data: Readonly<ILineChartData>) => void;
+export type LineChartHoverHandler = (value?: IHoverData<Readonly<ILineChartData>>) => void;
 type EventHandlers = IEventHandlers<LineChartClickHandler, LineChartHoverHandler>;
 
 export interface ILineChartOptions extends EventHandlers, ILevelOptions {

@@ -9,8 +9,8 @@ export interface IBarData extends IPathData<IBarChartData> {
   pillars: ReadonlyArray<Path2D>;
 }
 
-type BarChartClickHandler = (data: Readonly<IBarChartData>) => void;
-type BarChartHoverHandler = (value?: IHoverData<Readonly<IBarChartData>>) => void;
+export type BarChartClickHandler = (data: Readonly<IBarChartData>) => void;
+export type BarChartHoverHandler = (value?: IHoverData<Readonly<IBarChartData>>) => void;
 type EventHandlers = IEventHandlers<BarChartClickHandler, BarChartHoverHandler>;
 
 export interface IBarChartOptions extends EventHandlers, ILevelOptions {
