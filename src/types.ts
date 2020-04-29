@@ -38,6 +38,7 @@ export interface ILevelOptions {
   rowColor: string;
   rowMargin: number;
   rowFont?: string;
+  rowFontSize: number;
   rowSkeleton?: boolean;
   rowFontAlign: 'left' | 'right';
   rowFontColor?: string;

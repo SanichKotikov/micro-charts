@@ -9,7 +9,7 @@ function getData(count: number) {
 createLineChart(getCanvas('line-chart-1'), getData(10), {
   ratio: 4,
   rowCount: 3,
-  rowFont: "8px system, -apple-system, BlinkMacSystemFont",
+  rowFont: 'system, -apple-system, BlinkMacSystemFont',
   top: 100,
   bottom: 0,
 });

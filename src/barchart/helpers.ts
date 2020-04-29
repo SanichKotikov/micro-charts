@@ -14,7 +14,8 @@ export function getOptions(
     .reduce((res, current) => [...res, ...current], []);
 
   const edges = calcEdges(values, options.top, options.bottom);
-  const padding = calcPadding(canvas, edges, custom.rowStroke, custom.rowFont);
+  const { rowStroke, rowFont, rowFontSize } = custom;
+  const padding = calcPadding(canvas, edges, rowStroke, rowFontSize, rowFont);
 
   const { width, height } = canvas;
   return { ...custom, width, height, ...edges, ...padding };
@@ -47,23 +48,25 @@ export function calcData(
   data: ReadonlyArray<Readonly<IBarChartData>>,
   options: Readonly<IOptions>,
 ): ReadonlyArray<Readonly<IBarData>> {
-  const { width, height, sPadding, vPadding, top, bottom, rowMargin } = options;
+  const { width, height, sPadding, vPadding, top, bottom, rowMargin, rowFont, rowFontSize } = options;
 
-  const startX = sPadding + rowMargin;
-  const W = (width - startX) / (data.length);
-  const H = (height - (vPadding * 2)) / (top - bottom);
+  const tShift = rowFont ? rowFontSize : 0;
+  const lShift = sPadding + rowMargin;
+
+  const W = (width - lShift) / (data.length);
+  const H = (height - (vPadding * 2) - tShift) / (top - bottom);
 
   const { barWidth, barMargin, barRadius } = options;
   const ptW = barWidth + (barMargin * 2);
 
   return data.map((item, i) => {
-    const x = i * W + startX;
+    const x = i * W + lShift;
 
     const shift = (W - (ptW * item.values.length)) / 2;
 
     const pillars = item.values.map((value, idx) => {
       const pX = x + shift + (idx * ptW) + barMargin;
-      const pY = (top - value) * H + vPadding;
+      const pY = (top - value) * H + vPadding + tShift;
       return getBarPath(pX, pY, barWidth, height, barRadius);
     });
 

@@ -10,6 +10,7 @@ export const OPTIONS: Readonly<IBarChartOptions> = {
   rowStroke: 0.5,
   rowColor: 'rgba(80, 140, 255, 0.5)',
   rowMargin: 4,
+  rowFontSize: 8,
   rowFontAlign: 'left',
   hoverColor: 'rgba(80, 140, 255, 0.05)',
 };
