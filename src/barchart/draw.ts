@@ -1,12 +1,12 @@
 import { IParams } from '../types';
-import { clearCanvas, drawLevels } from '../core';
+import { clearCanvas, drawRows } from '../core';
 import { IBarData, IOptions } from './types';
 
 export function draw(params: IParams<IBarData, IOptions>) {
   const { canvas, options: { width, height } } = params;
 
   clearCanvas(canvas, width, height);
-  drawLevels(params);
+  drawRows(params);
 
   const { fill } = params.options;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;

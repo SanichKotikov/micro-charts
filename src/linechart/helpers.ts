@@ -9,7 +9,7 @@ export function getOptions(
 ): Readonly<IOptions> {
   const custom: Readonly<ILineChartOptions> = { ...OPTIONS, ...options };
   const edges = calcEdges(data.map(item => item.value), options.top, options.bottom);
-  const padding = calcPadding(canvas, edges, custom.levelStroke, custom.levelFont);
+  const padding = calcPadding(canvas, edges, custom.rowStroke, custom.rowFont);
 
   const { width, height } = canvas;
   return { ...custom, width, height, ...edges, ...padding };
@@ -19,13 +19,14 @@ export function calcPoints(
   data: ReadonlyArray<Readonly<ILineChartData>>,
   options: Readonly<IOptions>,
 ): ReadonlyArray<Readonly<IPoint>> {
-  const { width, height, top, bottom, sPadding, vPadding, hoverType, onClick, onHoverChange } = options;
+  const { width, height, top, bottom, sPadding, vPadding, rowMargin, hoverType, onClick, onHoverChange } = options;
 
-  const W = (width - sPadding) / (data.length - 1);
+  const startX = sPadding + rowMargin;
+  const W = (width - startX) / (data.length - 1);
   const H = (height - (vPadding * 2)) / (top - bottom);
 
   return data.map((item, i) => {
-    const x = i * W + sPadding;
+    const x = i * W + startX;
     const y = (top - item.value) * H + vPadding;
     const path = new Path2D();
 

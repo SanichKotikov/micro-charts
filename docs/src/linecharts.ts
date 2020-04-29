@@ -8,8 +8,8 @@ function getData(count: number) {
 
 createLineChart(getCanvas('line-chart-1'), getData(10), {
   ratio: 4,
-  levelCount: 3,
-  levelFont: "8px system, -apple-system, BlinkMacSystemFont",
+  rowCount: 3,
+  rowFont: "8px system, -apple-system, BlinkMacSystemFont",
   top: 100,
   bottom: 0,
 });
@@ -19,7 +19,7 @@ createLineChart(getCanvas('line-chart-2'), getData(60), {
   color: 'red',
   fill: 'transparent',
   pointRadius: 1.5,
-  levelCount: 4,
-  levelStroke: 0.2,
-  levelColor: 'rgba(40, 40, 40, .3)',
+  rowCount: 4,
+  rowStroke: 0.2,
+  rowColor: 'rgba(40, 40, 40, .3)',
 });

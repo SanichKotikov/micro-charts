@@ -26,14 +26,14 @@ export function calcEdges(values: number[], top?: number, bottom?: number): Read
 export function calcPadding(
   canvas: HTMLCanvasElement,
   edges: IEdges,
-  levelStroke: number,
-  levelFont?: string,
+  rowStroke: number,
+  rowFont?: string,
 ): Readonly<IPadding> {
-  const stroke = levelStroke / 2;
-  if (!levelFont) return { sPadding: 0, vPadding: stroke };
+  const stroke = rowStroke / 2;
+  if (!rowFont) return { sPadding: 0, vPadding: stroke };
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.font = levelFont;
+  ctx.font = rowFont;
 
   const labels = [edges.top, edges.bottom]
     .map(num => Math.round(num).toString())
@@ -42,9 +42,34 @@ export function calcPadding(
   const { actualBoundingBoxAscent, width } = ctx.measureText(labels[0]);
 
   return {
-    sPadding: Math.ceil(width + 2), // font width, plus 2px
+    sPadding: Math.ceil(width),
     vPadding: Math.max(stroke, actualBoundingBoxAscent / 2),
   };
+}
+
+export function drawRect(x: number, y: number, w: number, h: number, radius = 0) {
+  const path = new Path2D();
+
+  if (radius <= 0) {
+    path.rect(x, y, w, h);
+    return path;
+  }
+
+  const r = Math.min(radius, (w / 2), (h / 2));
+  const x2 = x + w;
+  const y2 = y + h;
+
+  path.moveTo(x2 - r, y);
+  path.quadraticCurveTo(x2, y, x2, y + r);
+  path.lineTo(x2, y2 - r);
+  path.quadraticCurveTo(x2, y2, x2 - r, y2);
+  path.lineTo(x + r, y2);
+  path.quadraticCurveTo(x, y2, x, y2 - r);
+  path.lineTo(x, y + r);
+  path.quadraticCurveTo(x, y, x + r, y);
+  path.closePath();
+
+  return path;
 }
 
 export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
@@ -62,35 +87,45 @@ export function clearCanvas(canvas: HTMLCanvasElement, width: number, height: nu
   ctx.clearRect(0, 0, width, height);
 }
 
-export function drawLevels<O extends IDrawLevelOptions>(params: IParams<any, O>) {
+export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
   const { canvas, options } = params;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-  const { levelStroke, levelCount } = options;
-  if (!Number.isFinite(levelCount) || levelCount <= 0 || levelStroke <= 0) return params;
+  const { rowStroke, rowCount } = options;
+  if (!Number.isFinite(rowCount) || rowCount <= 0 || rowStroke <= 0) return params;
 
-  const { width, height, top, bottom, sPadding, vPadding, levelColor, levelFont } = options;
-  const count = Math.ceil(levelCount);
+  const { width, height, top, bottom, sPadding, vPadding } = options;
+  const count = Math.ceil(rowCount);
   const L = (height - vPadding * 2) / count;
 
   const step = (top - bottom) / count;
+  const { rowColor, rowMargin, rowFont, rowSkeleton, rowFontAlign, rowFontColor } = options;
+  const x = rowFontAlign === 'right' ? sPadding : 0;
 
   for (let i = 0; i < count + 1; i++) {
     const y = (i * L) + vPadding;
 
     ctx.beginPath();
-    ctx.moveTo(sPadding, y);
+    ctx.moveTo(sPadding + rowMargin, y);
     ctx.lineTo(width, y);
-    ctx.lineWidth = levelStroke;
-    ctx.strokeStyle = levelColor;
+    ctx.lineWidth = rowStroke;
+    ctx.strokeStyle = rowColor;
     ctx.stroke();
 
-    if (typeof levelFont === 'string') {
-      ctx.font = levelFont;
+    if (typeof rowFont === 'string') {
+      ctx.font = rowFont;
+      ctx.fillStyle = typeof rowFontColor === 'string' ? rowFontColor : rowColor;
+
       const label = Math.round(top - (step * i)).toString();
       const { actualBoundingBoxAscent } = ctx.measureText(label);
-      ctx.fillStyle = levelColor;
-      ctx.fillText(label, 0, y + ((actualBoundingBoxAscent - levelStroke / 2) / 2));
+      const shift = (actualBoundingBoxAscent - rowStroke / 2) / 2;
+
+      if (rowSkeleton) {
+        ctx.fill(drawRect(0, y - shift, sPadding, actualBoundingBoxAscent, 2));
+      } else {
+        ctx.textAlign = rowFontAlign;
+        ctx.fillText(label, x, y + shift);
+      }
     }
   }
 

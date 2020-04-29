@@ -1,12 +1,12 @@
 import { IParams } from '../types';
-import { pipe, clearCanvas, drawLevels } from '../core';
+import { pipe, clearCanvas, drawRows } from '../core';
 import { IPoint, IOptions } from './types';
 
 function fill(params: IParams<IPoint, IOptions>) {
   const { canvas, paths, options } = params;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-  const { height, width, sPadding, fill } = options;
+  const { height, width, sPadding, fill, rowMargin } = options;
   let background: string | CanvasGradient = 'transparent';
 
   if (Array.isArray(fill)) {
@@ -24,7 +24,7 @@ function fill(params: IParams<IPoint, IOptions>) {
   }
 
   ctx.beginPath();
-  ctx.lineTo(sPadding, height);
+  ctx.lineTo(sPadding + rowMargin, height);
   paths.forEach(({ x, y }) => ctx.lineTo(x, y));
   ctx.lineTo(width, height);
   ctx.closePath();
@@ -63,5 +63,5 @@ function line(params: IParams<IPoint, IOptions>) {
 export function draw(params: IParams<IPoint, IOptions>) {
   const { canvas, options: { width, height } } = params;
   clearCanvas(canvas, width, height);
-  pipe(fill, line, drawLevels)(params);
+  pipe(drawRows, fill, line)(params);
 }

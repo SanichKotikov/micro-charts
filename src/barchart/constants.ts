@@ -6,8 +6,10 @@ export const OPTIONS: Readonly<IBarChartOptions> = {
   barWidth: 10,
   barMargin: 1,
   barRadius: 4,
-  levelCount: 3,
-  levelStroke: 0.5,
-  levelColor: 'rgba(80, 140, 255, 0.5)',
+  rowCount: 3,
+  rowStroke: 0.5,
+  rowColor: 'rgba(80, 140, 255, 0.5)',
+  rowMargin: 4,
+  rowFontAlign: 'left',
   hoverColor: 'rgba(80, 140, 255, 0.05)',
 };

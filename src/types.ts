@@ -33,10 +33,14 @@ export interface IEdges {
 export interface ILevelOptions {
   top?: number;
   bottom?: number;
-  levelCount: number;
-  levelStroke: number;
-  levelColor: string;
-  levelFont?: string;
+  rowCount: number;
+  rowStroke: number;
+  rowColor: string;
+  rowMargin: number;
+  rowFont?: string;
+  rowSkeleton?: boolean;
+  rowFontAlign: 'left' | 'right';
+  rowFontColor?: string;
 }
 
 export interface IDrawLevelOptions extends IEventHandlers, ILevelOptions, ISize, IPadding {

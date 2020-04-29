@@ -14,7 +14,7 @@ export function getOptions(
     .reduce((res, current) => [...res, ...current], []);
 
   const edges = calcEdges(values, options.top, options.bottom);
-  const padding = calcPadding(canvas, edges, custom.levelStroke, custom.levelFont);
+  const padding = calcPadding(canvas, edges, custom.rowStroke, custom.rowFont);
 
   const { width, height } = canvas;
   return { ...custom, width, height, ...edges, ...padding };
@@ -47,16 +47,17 @@ export function calcData(
   data: ReadonlyArray<Readonly<IBarChartData>>,
   options: Readonly<IOptions>,
 ): ReadonlyArray<Readonly<IBarData>> {
-  const { width, height, sPadding, vPadding, top, bottom } = options;
+  const { width, height, sPadding, vPadding, top, bottom, rowMargin } = options;
 
-  const W = (width - sPadding) / (data.length);
+  const startX = sPadding + rowMargin;
+  const W = (width - startX) / (data.length);
   const H = (height - (vPadding * 2)) / (top - bottom);
 
   const { barWidth, barMargin, barRadius } = options;
   const ptW = barWidth + (barMargin * 2);
 
   return data.map((item, i) => {
-    const x = i * W + sPadding;
+    const x = i * W + startX;
 
     const shift = (W - (ptW * item.values.length)) / 2;
 
