@@ -122,7 +122,7 @@ export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
       ctx.fillStyle = typeof rowFontColor === 'string' ? rowFontColor : rowColor;
 
       if (rowSkeleton) {
-        ctx.fill(drawRect(0, y, sPadding, 10 /* TODO */, 2));
+        ctx.fill(drawRect(0, y - rowFontSize, sPadding, rowFontSize, 2));
       } else {
         const label = Math.round(top - (step * i)).toString();
         ctx.font = getFontStr(rowFont, rowFontSize);
