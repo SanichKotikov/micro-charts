@@ -65,6 +65,8 @@ export function calcData(
     const shift = (W - (ptW * item.values.length)) / 2;
 
     const pillars = item.values.map((value, idx) => {
+      if (value <= bottom) return new Path2D();
+
       const pX = x + shift + (idx * ptW) + barMargin;
       const pY = (top - value) * H + vPadding + tShift;
       return getBarPath(pX, pY, barWidth, height, barRadius);
