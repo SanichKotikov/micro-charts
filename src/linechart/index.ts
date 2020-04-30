@@ -13,7 +13,12 @@ export function createLineChart(
   setupCanvas(canvas, opt.width, opt.height, opt.ratio);
 
   const paths = calcPoints(data, opt);
-  const params: IParams<IPoint, IOptions> = { canvas, paths, options: opt, columns: getColumns(data) };
+  const params: IParams<IPoint, IOptions> = {
+    canvas,
+    paths,
+    options: opt,
+    columns: getColumns(data.slice(1)),
+  };
 
   draw(params);
 
