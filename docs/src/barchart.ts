@@ -6,16 +6,21 @@ function getData(count: number, bars: number) {
     .map((value, i) => ({ id: i.toString(), values: getRandomData(bars) }))
 }
 
-createBarChart(getCanvas('bar-chart-1'), getData(6, 2), {
-  fill: ['#E91E63', '#4CAF50'],
-  barWidth: 14,
-  barMargin: 0,
-  barRadius: 0,
-  rowFont: 'system, -apple-system, BlinkMacSystemFont',
-  rowFontAlign: 'right',
-  top: 100,
-  bottom: 0,
-});
+createBarChart(
+  getCanvas('bar-chart-1'),
+  getData(4, 2).map(item => ({ ...item, label: item.values.join(' | ') })),
+  {
+    fill: ['#E91E63', '#4CAF50'],
+    barWidth: 14,
+    barMargin: 0,
+    barRadius: 0,
+    rowFont: 'system, -apple-system, BlinkMacSystemFont',
+    rowFontAlign: 'right',
+    top: 100,
+    bottom: 0,
+    onHoverChange: () => {},
+  }
+);
 
 createBarChart(getCanvas('bar-chart-2'), getData(6, 3), {
   fill: ['#00BCD4', '#FFC107', '#CDDC39'],

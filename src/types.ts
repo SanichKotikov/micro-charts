@@ -13,6 +13,7 @@ export interface IParams<P extends IPathData, O extends IEventHandlers> {
   canvas: HTMLCanvasElement;
   paths: ReadonlyArray<Readonly<P>>;
   options: Readonly<O>;
+  columns?: ReadonlyArray<string>;
 }
 
 export interface ISize {
@@ -42,11 +43,14 @@ export interface ILevelOptions {
   rowSkeleton?: boolean;
   rowFontAlign: 'left' | 'right';
   rowFontColor?: string;
+  footerColor?: string;
+  footerMargin: number;
 }
 
 export interface IDrawLevelOptions extends IEventHandlers, ILevelOptions, ISize, IPadding {
   top: number;
   bottom: number;
+  footer: number;
 }
 
 export interface IHoverRenderData<P extends IPathData> {

@@ -1,5 +1,5 @@
 import { IParams } from '../types';
-import { setupCanvas, setupEvents } from '../core';
+import { setupCanvas, getColumns, setupEvents } from '../core';
 import { IBarChartData, IBarData, IBarChartOptions, IOptions } from './types';
 import { getOptions, calcData } from './helpers';
 import { draw } from './draw';
@@ -13,7 +13,7 @@ export function createBarChart(
   setupCanvas(canvas, opt.width, opt.height, opt.ratio);
 
   const paths = calcData(data, opt);
-  const params: IParams<IBarData, IOptions> = { canvas, paths, options: opt };
+  const params: IParams<IBarData, IOptions> = { canvas, paths, options: opt, columns: getColumns(data) };
 
   draw(params);
 

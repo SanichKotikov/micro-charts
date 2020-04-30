@@ -1,5 +1,5 @@
 import { IParams } from '../types';
-import { setupCanvas, setupEvents } from '../core';
+import { setupCanvas, getColumns, setupEvents } from '../core';
 import { ILineChartData, IPoint, ILineChartOptions, IOptions } from './types';
 import { getOptions, calcPoints } from './helpers';
 import { draw } from './draw';
@@ -13,7 +13,7 @@ export function createLineChart(
   setupCanvas(canvas, opt.width, opt.height, opt.ratio);
 
   const paths = calcPoints(data, opt);
-  const params: IParams<IPoint, IOptions> = { canvas, paths, options: opt };
+  const params: IParams<IPoint, IOptions> = { canvas, paths, options: opt, columns: getColumns(data) };
 
   draw(params);
 

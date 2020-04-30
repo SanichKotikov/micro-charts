@@ -1,5 +1,5 @@
 import { IParams } from '../types';
-import { clearCanvas, drawRows } from '../core';
+import { clearCanvas, drawRows, drawFooter } from '../core';
 import { IBarData, IOptions } from './types';
 
 export function draw(params: IParams<IBarData, IOptions>) {
@@ -17,4 +17,6 @@ export function draw(params: IParams<IBarData, IOptions>) {
       ctx.fill(path);
     })
   });
+
+  drawFooter(params);
 }

@@ -3,6 +3,7 @@ import { IPathData, ISize, IPadding, ILevelOptions, IHoverData, IEventHandlers }
 export interface ILineChartData {
   id: string,
   value: number,
+  label?: string,
 }
 
 export interface IPoint extends IPathData<ILineChartData> {
@@ -26,4 +27,5 @@ export interface ILineChartOptions extends EventHandlers, ILevelOptions {
 export interface IOptions extends ILineChartOptions, IPadding, ISize {
   top: number;
   bottom: number;
+  footer: number;
 }

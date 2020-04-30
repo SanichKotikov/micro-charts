@@ -16,6 +16,14 @@ export function getFontStr(name: string, size: number) {
   return `${size}px/1 ${name}`;
 }
 
+export function hasFooter<T extends { label?: string }>(items: ReadonlyArray<T>) {
+  return items.some(item => typeof item.label === 'string');
+}
+
+export function calcH(height: number, padding: number, head: number, footer: number) {
+  return height - (padding * 2) - head - footer;
+}
+
 export function calcEdges(values: number[], top?: number, bottom?: number): Readonly<IEdges> {
   let upper = top ?? Math.max.apply(null, values);
   let lower = bottom ?? Math.min.apply(null, values);
@@ -50,6 +58,17 @@ export function calcPadding(
     sPadding: Math.ceil(width),
     vPadding: Math.max(stroke),
   };
+}
+
+export function getColumns<T extends { label?: string }>(data: ReadonlyArray<Readonly<T>>) {
+  return hasFooter(data) ? data.map(item => (item.label || '') as string) : undefined;
+}
+
+export function drawLine(x1: number, y1: number, x2: number, y2: number) {
+  const path = new Path2D();
+  path.moveTo(x1, y1);
+  path.lineTo(x2, y2);
+  return path;
 }
 
 export function drawRect(x: number, y: number, w: number, h: number, radius = 0) {
@@ -92,6 +111,36 @@ export function clearCanvas(canvas: HTMLCanvasElement, width: number, height: nu
   ctx.clearRect(0, 0, width, height);
 }
 
+export function drawLabel(
+  ctx: CanvasRenderingContext2D,
+  skeleton: boolean | undefined,
+  value: number,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+) {
+  if (skeleton) ctx.fill(drawRect(0, y - h, w, h, 2));
+  else ctx.fillText(Math.round(value).toString(), x, y);
+}
+
+export function setRowStyle<O extends IDrawLevelOptions>(params: IParams<any, O>, isFooter = false) {
+  const { canvas, options } = params;
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  const { rowStroke, rowColor, rowFont, rowFontColor, rowFontSize, rowFontAlign, footerColor } = options;
+
+  ctx.lineWidth = rowStroke;
+  ctx.strokeStyle = isFooter && typeof footerColor === 'string' ? footerColor : rowColor;
+
+  const labelColor = typeof rowFontColor === 'string' ? rowFontColor : rowColor;
+
+  if (typeof rowFont === 'string') {
+    ctx.font = getFontStr(rowFont, rowFontSize);
+    ctx.textAlign = rowFontAlign;
+    ctx.fillStyle = labelColor;
+  }
+}
+
 export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
   const { canvas, options } = params;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -99,37 +148,71 @@ export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
   const { rowStroke, rowCount } = options;
   if (!Number.isFinite(rowCount) || rowCount <= 0 || rowStroke <= 0) return params;
 
-  const { width, height, top, bottom, sPadding, vPadding, rowFont, rowFontSize } = options;
+  const { width, height, top, bottom, sPadding, vPadding, footer, rowFont, rowFontSize } = options;
   const count = Math.ceil(rowCount);
-  const topShift = rowFont ? rowFontSize : 0;
-  const L = (height - (vPadding * 2) - topShift) / count;
+  const head = rowFont ? rowFontSize : 0;
+  const H = calcH(height, vPadding, head, footer) / count;
 
   const step = (top - bottom) / count;
-  const { rowColor, rowMargin, rowSkeleton, rowFontAlign, rowFontColor } = options;
+  const { rowMargin, rowSkeleton, rowFontAlign } = options;
+
+  const l = sPadding + rowMargin;
   const x = rowFontAlign === 'right' ? sPadding : 0;
 
-  for (let i = 0; i < count + 1; i++) {
-    const y = (i * L) + vPadding + topShift;
+  setRowStyle(params);
 
-    ctx.beginPath();
-    ctx.moveTo(sPadding + rowMargin, y);
-    ctx.lineTo(width, y);
-    ctx.lineWidth = rowStroke;
-    ctx.strokeStyle = rowColor;
-    ctx.stroke();
+  for (let i = 0; i < count; i++) {
+    const y = (i * H) + vPadding + head;
+    ctx.stroke(drawLine(l, y, width, y));
 
-    if (typeof rowFont === 'string') {
-      ctx.fillStyle = typeof rowFontColor === 'string' ? rowFontColor : rowColor;
+    if (rowFont) {
+      const label = top - (step * i);
+      drawLabel(ctx, rowSkeleton, label, x, y, sPadding, rowFontSize);
+    }
+  }
+
+  return params;
+}
+
+export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>) {
+  const { canvas, options } = params;
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+  const { rowStroke, rowCount } = options;
+  if (!Number.isFinite(rowCount) || rowCount <= 0 || rowStroke <= 0) return params;
+
+  const { width, height, sPadding, footer, bottom, footerMargin } = options;
+  const { rowMargin, rowFont, rowFontAlign, rowFontSize, rowSkeleton } = options;
+
+  const l = sPadding + rowMargin;
+  const x = rowFontAlign === 'right' ? sPadding : 0;
+  const y = height - footer;
+  const stroke = rowStroke / 2;
+
+  setRowStyle(params, true);
+
+  ctx.stroke(drawLine(l, y, width, y));
+  if (rowFont) drawLabel(ctx, rowSkeleton, bottom, x, y, sPadding, rowFontSize);
+
+  const { columns } = params;
+
+  if (typeof rowFont === 'string' && columns) {
+    const colW = (width - l) / (columns.length);
+    ctx.textAlign = 'center';
+
+    columns.forEach((column, i) => {
+      const colX = i * colW + l + stroke;
+      ctx.stroke(drawLine(colX, y + stroke, colX, y + (footerMargin / 2)));
+      const cX = colX + (colW / 2);
 
       if (rowSkeleton) {
-        ctx.fill(drawRect(0, y - rowFontSize, sPadding, rowFontSize, 2));
-      } else {
-        const label = Math.round(top - (step * i)).toString();
-        ctx.font = getFontStr(rowFont, rowFontSize);
-        ctx.textAlign = rowFontAlign;
-        ctx.fillText(label, x, y);
-      }
-    }
+        const sW = colW / 3;
+        ctx.fill(drawRect(cX - (sW / 2), height - rowFontSize, sW, rowFontSize, 2));
+      } else ctx.fillText(column, cX, height);
+    });
+
+    const lX = width - stroke;
+    ctx.stroke(drawLine(lX, y - stroke, lX, y + 4));
   }
 
   return params;

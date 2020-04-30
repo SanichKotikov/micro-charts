@@ -3,6 +3,7 @@ import { IPathData, ISize, IPadding, ILevelOptions, IHoverData, IEventHandlers }
 export interface IBarChartData {
   id: string;
   values: ReadonlyArray<number>;
+  label?: string;
 }
 
 export interface IBarData extends IPathData<IBarChartData> {
@@ -24,4 +25,5 @@ export interface IBarChartOptions extends EventHandlers, ILevelOptions {
 export interface IOptions extends IBarChartOptions, IPadding, ISize {
   top: number;
   bottom: number;
+  footer: number;
 }
