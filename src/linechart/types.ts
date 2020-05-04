@@ -2,6 +2,7 @@ import {
   IDrawData,
   ICanvas,
   IPoint,
+  IEdges,
   IGeometry,
   IRowOptions,
   IHoverData,
@@ -22,8 +23,13 @@ export type LineChartClickHandler = (data: Readonly<ILineChartData>) => void;
 export type LineChartHoverHandler = (value?: IHoverData<Readonly<ILineChartData>>) => void;
 type EventHandlers = IEventHandlers<LineChartClickHandler, LineChartHoverHandler>;
 
-export interface ILineChartOptions extends ICanvas, EventHandlers, IHoverOptions, IRowOptions, ILineOptions {
-  hoverType: 'point' | 'segment';
-}
+export type ILineChartOptions =
+  ICanvas &
+  EventHandlers &
+  IHoverOptions &
+  Partial<IEdges> &
+  IRowOptions &
+  ILineOptions &
+  { hoverType: 'point' | 'segment'; }
 
 export type IOptions = ILineChartOptions & IGeometry;
