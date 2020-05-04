@@ -1,12 +1,4 @@
-import {
-  IPathData,
-  IParams,
-  IPadding,
-  IEdges,
-  IEventHandlers,
-  IDrawLevelOptions,
-  IHoverRenderData,
-} from './types';
+import { IPadding, IEdges } from './types';
 
 export function pipe(...fus: Function[]) {
   return <T>(init: T) => fus.reduce((res, fn) => fn(res), init);
@@ -60,18 +52,32 @@ export function calcPadding(
   };
 }
 
+export function getOptions(
+  canvas: HTMLCanvasElement,
+  options: Readonly<any>,
+  values: number[],
+  hasFooter: boolean,
+): Readonly<any> {
+  const edges = calcEdges(values, options.top, options.bottom);
+  const { rowStroke, rowFont, rowFontSize, footerMargin } = options;
+  const padding = calcPadding(canvas, edges, rowStroke, rowFontSize, rowFont);
+  const footer = hasFooter ? rowFontSize + footerMargin : 0;
+  const { width, height } = canvas;
+  return { ...options, width, height, ...edges, ...padding, footer };
+}
+
 export function getColumns<T extends { label?: string }>(data: ReadonlyArray<Readonly<T>>) {
   return hasFooter(data) ? data.map(item => (item.label || '') as string) : undefined;
 }
 
-export function drawLine(x1: number, y1: number, x2: number, y2: number) {
+export function getLinePath(x1: number, y1: number, x2: number, y2: number) {
   const path = new Path2D();
   path.moveTo(x1, y1);
   path.lineTo(x2, y2);
   return path;
 }
 
-export function drawRect(x: number, y: number, w: number, h: number, radius = 0) {
+export function getRectPath(x: number, y: number, w: number, h: number, radius = 0) {
   const path = new Path2D();
 
   if (radius <= 0) {
@@ -96,236 +102,32 @@ export function drawRect(x: number, y: number, w: number, h: number, radius = 0)
   return path;
 }
 
-export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-  canvas.width = width * ratio;
-  canvas.height = height * ratio;
+export function getBarPath(x: number, y: number, w: number, b: number, r: number) {
+  const path = new Path2D();
+  const h = b - y;
 
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.scale(ratio, ratio);
-}
-
-export function clearCanvas(canvas: HTMLCanvasElement, width: number, height: number) {
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.clearRect(0, 0, width, height);
-}
-
-export function drawLabel(
-  ctx: CanvasRenderingContext2D,
-  skeleton: boolean | undefined,
-  value: number,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-) {
-  if (skeleton) ctx.fill(drawRect(0, y - h, w, h, 2));
-  else ctx.fillText(Math.round(value).toString(), x, y);
-}
-
-export function setRowStyle<O extends IDrawLevelOptions>(params: IParams<any, O>, isFooter = false) {
-  const { canvas, options } = params;
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  const { rowStroke, rowColor, rowFont, rowFontColor, rowFontSize, rowFontAlign, footerColor } = options;
-
-  ctx.lineWidth = rowStroke;
-  ctx.strokeStyle = isFooter && typeof footerColor === 'string' ? footerColor : rowColor;
-
-  const labelColor = typeof rowFontColor === 'string' ? rowFontColor : rowColor;
-
-  if (typeof rowFont === 'string') {
-    ctx.font = getFontStr(rowFont, rowFontSize);
-    ctx.textAlign = rowFontAlign;
-    ctx.fillStyle = labelColor;
-  }
-}
-
-export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
-  const { canvas, options } = params;
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-
-  const { rowStroke, rowCount } = options;
-  if (!Number.isFinite(rowCount) || rowCount <= 0 || rowStroke <= 0) return params;
-
-  const { width, height, top, bottom, sPadding, vPadding, footer, rowFont, rowFontSize } = options;
-  const count = Math.ceil(rowCount);
-  const head = rowFont ? rowFontSize : 0;
-  const H = calcH(height, vPadding, head, footer) / count;
-
-  const step = (top - bottom) / count;
-  const { rowMargin, rowSkeleton, rowFontAlign } = options;
-
-  const l = sPadding + rowMargin;
-  const x = rowFontAlign === 'right' ? sPadding : 0;
-
-  setRowStyle(params);
-
-  for (let i = 0; i < count; i++) {
-    const y = (i * H) + vPadding + head;
-    ctx.stroke(drawLine(l, y, width, y));
-
-    if (rowFont) {
-      const label = top - (step * i);
-      drawLabel(ctx, rowSkeleton, label, x, y, sPadding, rowFontSize);
-    }
+  if (r <= 0) {
+    path.rect(x, y, w, h);
+    return path;
   }
 
-  return params;
-}
+  const radius = Math.min(r, (w / 2), h);
+  const yR = y + radius;
+  const x2 = x + w;
 
-export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>) {
-  const { canvas, options } = params;
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  path.moveTo(x, b);
+  path.lineTo(x, yR);
+  path.quadraticCurveTo(x, y, x + radius, y);
+  path.lineTo(x2 - radius, y);
+  path.quadraticCurveTo(x2, y, x2, yR);
+  path.lineTo(x2, b);
+  path.closePath();
 
-  const { rowStroke, rowCount } = options;
-  if (!Number.isFinite(rowCount) || rowCount <= 0 || rowStroke <= 0) return params;
-
-  const { width, height, sPadding, footer, bottom, footerMargin } = options;
-  const { rowMargin, rowFont, rowFontAlign, rowFontSize, rowSkeleton } = options;
-
-  const l = sPadding + rowMargin;
-  const x = rowFontAlign === 'right' ? sPadding : 0;
-  const y = height - footer;
-  const stroke = rowStroke / 2;
-
-  setRowStyle(params, true);
-
-  ctx.stroke(drawLine(l, y, width, y));
-  if (rowFont) drawLabel(ctx, rowSkeleton, bottom, x, y, sPadding, rowFontSize);
-
-  const { columns } = params;
-
-  if (typeof rowFont === 'string' && columns) {
-    const colW = (width - l) / (columns.length);
-    ctx.textAlign = 'center';
-
-    columns.forEach((column, i) => {
-      const colX = i * colW + l + stroke;
-      ctx.stroke(drawLine(colX, y + stroke, colX, y + (footerMargin / 2)));
-      const cX = colX + (colW / 2);
-
-      if (rowSkeleton) {
-        const sW = colW / 3;
-        ctx.fill(drawRect(cX - (sW / 2), height - rowFontSize, sW, rowFontSize, 2));
-      } else ctx.fillText(column, cX, height);
-    });
-
-    const lX = width - stroke;
-    ctx.stroke(drawLine(lX, y - stroke, lX, y + 4));
-  }
-
-  return params;
+  return path;
 }
 
 export function getCanvasPoint(canvas: HTMLCanvasElement, ratio: number, event: MouseEvent) {
   const { clientX, clientY } = event;
   const { left, top } = canvas.getBoundingClientRect();
   return [(clientX - left) * ratio, (clientY - top) * ratio];
-}
-
-export function subscriber<P extends IPathData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
-  const { canvas } = params;
-  return (
-    event: string,
-    func: ((params: Readonly<IParams<P, O>>) => void) | undefined,
-    callback: Function | undefined,
-  ) => {
-    const handler = callback && func && func(params);
-    if (handler) canvas.addEventListener(event, handler);
-    return () => handler && canvas.removeEventListener(event, handler);
-  };
-}
-
-function clickHandler<P extends IPathData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
-  const canvas = params.canvas;
-  const { ratio, onClick } = params.options;
-
-  return (event: MouseEvent) => {
-    if (!onClick) return;
-
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    const [cX, cY] = getCanvasPoint(canvas, ratio, event);
-
-    for (let i = 0; i < params.paths.length; i++) {
-      const { path, data } = params.paths[i];
-
-      if (ctx.isPointInPath(path, cX, cY)) {
-        onClick(data);
-        return;
-      }
-    }
-  };
-}
-
-function moveHandler<P extends IPathData, O extends IEventHandlers>(
-  drawFunc: (params: Readonly<IParams<P, O>>) => void,
-  getData: () => IHoverRenderData<P>,
-) {
-  return (params: Readonly<IParams<P, O>>) => {
-    const canvas = params.canvas;
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    const { ratio, onClick, onHoverChange } = params.options;
-
-    return (event: MouseEvent) => {
-      if (!onHoverChange) return;
-
-      let cursor: string = 'default';
-      let found: Readonly<any> | undefined;
-      const [cX, cY] = getCanvasPoint(canvas, ratio, event);
-      drawFunc(params);
-
-      const { items, fill } = getData();
-
-      for (let i = 0; i < items.length; i++) {
-        const { data, path } = items[i];
-
-        if (ctx.isPointInPath(path, cX, cY)) {
-          ctx.fillStyle = fill(data.color);
-          ctx.fill(path);
-          cursor = 'pointer';
-          found = data;
-          break;
-        }
-      }
-
-      const { clientX, clientY } = event;
-      onHoverChange(found && { data: found, clientX, clientY });
-      if (onClick) canvas.style.cursor = cursor;
-    };
-  }
-}
-
-function leaveHandler<P extends IPathData, O extends IEventHandlers>(
-  drawFunc: (params: Readonly<IParams<P, O>>) => void,
-) {
-  return (params: Readonly<IParams<P, O>>) => {
-    const canvas = params.canvas;
-    const { onClick, onHoverChange } = params.options;
-
-    return () => {
-      drawFunc(params);
-      if (onHoverChange) onHoverChange(undefined);
-      if (onClick) canvas.style.cursor = 'default';
-    }
-  }
-}
-
-export function setupEvents<P extends IPathData, O extends IEventHandlers>(
-  params: Readonly<IParams<P, O>>,
-  drawFunc: (params: Readonly<IParams<P, O>>) => void,
-  getData: () => IHoverRenderData<P>,
-) {
-  const sub = subscriber(params);
-  const { onClick, onHoverChange } = params.options;
-
-  const unsubClick = sub('click', clickHandler, onClick);
-  const unsubMove = sub('mousemove', moveHandler(drawFunc, getData), onHoverChange);
-  const unsubLeave = sub('mouseleave', leaveHandler(drawFunc), onHoverChange);
-
-  return () => {
-    unsubClick();
-    unsubMove();
-    unsubLeave();
-  };
 }

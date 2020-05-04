@@ -2,31 +2,36 @@ import { IParams } from '../types';
 import { getOptions, getColumns, hasFooter } from '../core';
 import { setupCanvas } from '../draw';
 import { setupEvents } from '../events';
-import { IBarChartData, IBarData, IBarChartOptions, IOptions } from './types';
+import { ILineBarData, IData, ILineBarOptions, IOptions } from './types';
 import { OPTIONS } from './constants';
 import { calcData } from './helpers';
 import { draw } from './draw';
 
-export function createBarChart(
+export function createLineBarChart(
   canvas: HTMLCanvasElement,
-  data: ReadonlyArray<Readonly<IBarChartData>>,
-  options: Partial<Readonly<IBarChartOptions>> = {},
+  data: ReadonlyArray<Readonly<ILineBarData>>,
+  options: Partial<Readonly<ILineBarOptions>> = {},
 ) {
-  const custom = { ...OPTIONS, ...options };
+  const custom: Readonly<ILineBarOptions> = { ...OPTIONS, ...options };
   const values = data
-    .map(item => item.values as number[])
+    .map(item => [ item.value, ...item.bars ])
     .reduce((res, current) => [...res, ...current], []);
-  const opt: Readonly<IOptions> = getOptions(canvas, custom, values, hasFooter(data));
+  const opt = getOptions(canvas, custom, values, hasFooter(data));
 
   setupCanvas(canvas, opt.width, opt.height, opt.ratio);
 
   const paths = calcData(data, opt);
-  const params: IParams<IBarData, IOptions> = { canvas, paths, options: opt, columns: getColumns(data) };
+  const params: IParams<IData, IOptions> = {
+    canvas,
+    paths,
+    options: opt,
+    columns: getColumns(data.slice(1))
+  };
 
   draw(params);
 
   return setupEvents(params, draw, () => ({
-    items: paths,
+    items: paths.slice(1),
     fill: () => opt.hoverColor,
   }));
 }

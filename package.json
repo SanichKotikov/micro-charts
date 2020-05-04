@@ -1,6 +1,6 @@
 {
   "name": "micro-charts",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "A tiny library for visualizing your data",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -42,6 +42,7 @@
   "size-limit": [
     { "path": "lib/linechart/index.js" },
     { "path": "lib/barchart/index.js" },
+    { "path": "lib/linebarchart/index.js" },
     { "path": "lib/piechart/index.js" },
     { "path": "lib/index.js" }
   ],

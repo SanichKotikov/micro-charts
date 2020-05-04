@@ -10,7 +10,7 @@ createBarChart(
   getCanvas('bar-chart-1'),
   getData(4, 2).map(item => ({ ...item, label: item.values.join(' | ') })),
   {
-    fill: ['#E91E63', '#4CAF50'],
+    barColors: ['#E91E63', '#4CAF50'],
     barWidth: 14,
     barMargin: 0,
     barRadius: 0,
@@ -23,7 +23,7 @@ createBarChart(
 );
 
 createBarChart(getCanvas('bar-chart-2'), getData(6, 3), {
-  fill: ['#00BCD4', '#FFC107', '#CDDC39'],
+  barColors: ['#00BCD4', '#FFC107', '#CDDC39'],
   rowColor: 'rgba(40, 40, 40, .3)',
   barWidth: 8,
   barMargin: 0.5,

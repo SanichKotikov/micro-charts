@@ -1,8 +1,12 @@
-import { IBarChartOptions } from './types';
+import { ILineBarOptions } from './types';
 
-export const OPTIONS: Readonly<IBarChartOptions> = {
+export const OPTIONS: Readonly<ILineBarOptions> = {
   ratio: window.devicePixelRatio || 1,
   bottom: 0,
+  lineStroke: 0.5,
+  lineColor: '#4e5098',
+  lineFill: ['rgba(130, 210, 255, 0)', 'rgba(130, 210, 255, 0.3)'],
+  pointRadius: 2,
   barWidth: 10,
   barColors: ['#4e5098'],
   barMargin: 1,

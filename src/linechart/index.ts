@@ -1,7 +1,10 @@
 import { IParams } from '../types';
-import { setupCanvas, getColumns, setupEvents } from '../core';
-import { ILineChartData, IPoint, ILineChartOptions, IOptions } from './types';
-import { getOptions, calcPoints } from './helpers';
+import { getOptions, getColumns, hasFooter } from '../core';
+import { setupCanvas } from '../draw';
+import { setupEvents } from '../events';
+import { ILineChartData, ILineData, ILineChartOptions, IOptions } from './types';
+import { OPTIONS } from './constants';
+import { calcPoints } from './helpers';
 import { draw } from './draw';
 
 export function createLineChart(
@@ -9,11 +12,14 @@ export function createLineChart(
   data: ReadonlyArray<Readonly<ILineChartData>>,
   options: Partial<Readonly<ILineChartOptions>> = {},
 ) {
-  const opt = getOptions(canvas, data, options);
+  const custom = { ...OPTIONS, ...options };
+  const values = data.map(item => item.value);
+  const opt: Readonly<IOptions> = getOptions(canvas, custom, values, hasFooter(data));
+
   setupCanvas(canvas, opt.width, opt.height, opt.ratio);
 
   const paths = calcPoints(data, opt);
-  const params: IParams<IPoint, IOptions> = {
+  const params: IParams<ILineData, IOptions> = {
     canvas,
     paths,
     options: opt,

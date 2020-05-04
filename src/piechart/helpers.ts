@@ -1,5 +1,5 @@
-import { clearCanvas } from '../core';
 import { IParams } from '../types';
+import { clearCanvas } from '../draw';
 import {
   IPieChartData,
   IPieChartOptions,

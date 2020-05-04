@@ -1,26 +1,10 @@
-import { hasFooter, calcH, calcEdges, calcPadding } from '../core';
-import { OPTIONS } from './constants';
-import { ILineChartData, IPoint, ILineChartOptions, IOptions } from './types';
-
-export function getOptions(
-  canvas: HTMLCanvasElement,
-  data: ReadonlyArray<Readonly<ILineChartData>>,
-  options: Partial<Readonly<ILineChartOptions>> = {},
-): Readonly<IOptions> {
-  const custom: Readonly<ILineChartOptions> = { ...OPTIONS, ...options };
-  const edges = calcEdges(data.map(item => item.value), options.top, options.bottom);
-  const { rowStroke, rowFont, rowFontSize, footerMargin } = custom;
-  const padding = calcPadding(canvas, edges, rowStroke, rowFontSize, rowFont);
-  const footer = hasFooter(data) ? rowFontSize + footerMargin : 0;
-
-  const { width, height } = canvas;
-  return { ...custom, width, height, ...edges, ...padding, footer };
-}
+import { calcH } from '../core';
+import { ILineChartData, ILineData, IOptions } from './types';
 
 export function calcPoints(
   data: ReadonlyArray<Readonly<ILineChartData>>,
   options: Readonly<IOptions>,
-): ReadonlyArray<Readonly<IPoint>> {
+): ReadonlyArray<Readonly<ILineData>> {
   const { width, height, top, bottom, sPadding, vPadding, rowMargin, rowFont, rowFontSize, footer } = options;
 
   const head = rowFont ? rowFontSize : 0;

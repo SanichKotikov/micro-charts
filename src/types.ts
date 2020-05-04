@@ -3,6 +3,10 @@ export interface IPathData<T = any> {
   data: Readonly<T>;
 }
 
+export interface IPathBarData<T = any> extends IPathData<T> {
+  pillars: ReadonlyArray<Path2D>;
+}
+
 export interface IEventHandlers<C = Function, H = Function> {
   ratio: number;
   onClick?: C;
@@ -14,6 +18,11 @@ export interface IParams<P extends IPathData, O extends IEventHandlers> {
   paths: ReadonlyArray<Readonly<P>>;
   options: Readonly<O>;
   columns?: ReadonlyArray<string>;
+}
+
+export interface IPoint {
+  x: number;
+  y: number;
 }
 
 export interface ISize {
@@ -29,6 +38,10 @@ export interface IPadding {
 export interface IEdges {
   top: number;
   bottom: number;
+}
+
+export interface IFooterOptions {
+  footer: number;
 }
 
 export interface ILevelOptions {
@@ -47,9 +60,29 @@ export interface ILevelOptions {
   footerMargin: number;
 }
 
+export interface ILineOptions {
+  lineStroke: number;
+  lineColor: string;
+  lineFill: string | ReadonlyArray<string>;
+  pointRadius: number;
+}
+
+export interface IBarOptions {
+  barColors: ReadonlyArray<string>,
+  barWidth: number;
+  barMargin: number;
+  barRadius: number;
+}
+
 export interface IDrawLevelOptions extends IEventHandlers, ILevelOptions, ISize, IPadding {
   top: number;
   bottom: number;
+  footer: number;
+}
+
+export interface IDrawBarOptions extends IEventHandlers, IBarOptions {}
+
+export interface IDrawLineOptions extends IEventHandlers, ILevelOptions, ISize, IPadding, ILineOptions {
   footer: number;
 }
 

@@ -1,4 +1,15 @@
-import { IPathData, ISize, IPadding, ILevelOptions, IHoverData, IEventHandlers } from '../types';
+import {
+  IPathData,
+  IPoint,
+  ISize,
+  IPadding,
+  IEdges,
+  IFooterOptions,
+  ILevelOptions,
+  IHoverData,
+  IEventHandlers,
+  ILineOptions,
+} from '../types';
 
 export interface ILineChartData {
   id: string,
@@ -6,26 +17,15 @@ export interface ILineChartData {
   label?: string,
 }
 
-export interface IPoint extends IPathData<ILineChartData> {
-  x: number;
-  y: number;
-}
+export type ILineData = IPathData<ILineChartData> & IPoint;
 
 export type LineChartClickHandler = (data: Readonly<ILineChartData>) => void;
 export type LineChartHoverHandler = (value?: IHoverData<Readonly<ILineChartData>>) => void;
 type EventHandlers = IEventHandlers<LineChartClickHandler, LineChartHoverHandler>;
 
-export interface ILineChartOptions extends EventHandlers, ILevelOptions {
-  stroke: number;
-  color: string;
-  fill: string | ReadonlyArray<string>;
-  pointRadius: number;
+export interface ILineChartOptions extends EventHandlers, ILevelOptions, ILineOptions {
   hoverType: 'point' | 'segment';
   hoverColor: string;
 }
 
-export interface IOptions extends ILineChartOptions, IPadding, ISize {
-  top: number;
-  bottom: number;
-  footer: number;
-}
+export type IOptions = ILineChartOptions & IPadding & ISize & IEdges & IFooterOptions;

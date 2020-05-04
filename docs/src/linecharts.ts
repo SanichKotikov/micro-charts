@@ -15,9 +15,9 @@ createLineChart(getCanvas('line-chart-1'), getData(10), {
 });
 
 createLineChart(getCanvas('line-chart-2'), getData(60), {
-  stroke: 0.5,
-  color: 'red',
-  fill: 'transparent',
+  lineStroke: 0.5,
+  lineColor: 'red',
+  lineFill: 'transparent',
   pointRadius: 1.5,
   rowCount: 4,
   rowStroke: 0.2,

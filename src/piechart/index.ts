@@ -1,5 +1,6 @@
 import { IParams } from '../types';
-import { setupCanvas, setupEvents } from '../core';
+import { setupCanvas } from '../draw';
+import { setupEvents } from '../events';
 import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
 import { OPTIONS } from './constants';
 import { adjustColor, calc, draw } from './helpers';
