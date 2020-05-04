@@ -21,7 +21,7 @@ export function calcData(
 
     const shift = (W - (ptW * item.values.length)) / 2;
 
-    const pillars = item.values.map((value, idx) => {
+    const bars = item.values.map((value, idx) => {
       if (value <= bottom) return new Path2D();
 
       const pX = x + shift + (idx * ptW) + barMargin;
@@ -32,6 +32,6 @@ export function calcData(
     const mask = new Path2D();
     mask.rect(x, 0, W, height - footer);
 
-    return { data: item, pillars, path: mask };
+    return { data: item, bars, mask };
   });
 }

@@ -13,19 +13,18 @@ export function calcPoints(
   const W = (width - lShift) / (data.length - 1);
   const H = calcH(height, vPadding, head, footer) / (top - bottom);
 
-  const { hoverType, onClick, onHoverChange } = options;
+  const { hoverType } = options;
 
   return data.map((item, i) => {
     const x = i * W + lShift;
     const y = (top - item.value) * H + vPadding + head;
-    const path = new Path2D();
 
-    if (onClick || onHoverChange) {
-      hoverType === 'segment'
-        ? path.rect((x - W), 0, W, height - footer)
-        : path.arc(x, y, options.pointRadius * 6, 0, Math.PI * 2);
-    }
+    const mask = new Path2D();
 
-    return { data: item, x, y, path };
+    hoverType === 'segment'
+      ? mask.rect((x - W), 0, W, height - footer)
+      : mask.arc(x, y, options.pointRadius * 6, 0, Math.PI * 2);
+
+    return { data: item, x, y, mask };
   });
 }

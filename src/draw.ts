@@ -1,4 +1,4 @@
-import { IPathData, IPathBarData, IParams, IPoint, IDrawLevelOptions, IDrawBarOptions, IDrawLineOptions } from './types';
+import { IDrawData, IDrawBarData, IParams, IPoint, IDrawLevelOptions, IDrawBarOptions, IDrawLineOptions } from './types';
 import { getFontStr, calcH, getLinePath, getRectPath } from './core';
 
 export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
@@ -79,8 +79,8 @@ export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
   return params;
 }
 
-export function drawChartFill<P extends IPathData & IPoint, O extends IDrawLineOptions>(params: IParams<P, O>) {
-  const { canvas, paths, options } = params;
+export function drawChartFill<P extends IDrawData & IPoint, O extends IDrawLineOptions>(params: IParams<P, O>) {
+  const { canvas, drawData, options } = params;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
   const { height, width, sPadding, lineFill, rowMargin, footer } = options;
@@ -102,7 +102,7 @@ export function drawChartFill<P extends IPathData & IPoint, O extends IDrawLineO
 
   ctx.beginPath();
   ctx.lineTo(sPadding + rowMargin, height - footer);
-  paths.forEach(({ x, y }) => ctx.lineTo(x, y));
+  drawData.forEach(({ x, y }) => ctx.lineTo(x, y));
   ctx.lineTo(width, height - footer);
   ctx.closePath();
   ctx.fillStyle = background;
@@ -111,13 +111,13 @@ export function drawChartFill<P extends IPathData & IPoint, O extends IDrawLineO
   return params;
 }
 
-export function drawChartLine<P extends IPathData & IPoint, O extends IDrawLineOptions>(params: IParams<P, O>) {
-  const { canvas, paths, options } = params;
+export function drawChartLine<P extends IDrawData & IPoint, O extends IDrawLineOptions>(params: IParams<P, O>) {
+  const { canvas, drawData, options } = params;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
   if (options.lineStroke > 0) {
     ctx.beginPath();
-    paths.forEach(({ x, y }) => ctx.lineTo(x, y));
+    drawData.forEach(({ x, y }) => ctx.lineTo(x, y));
     ctx.lineWidth = options.lineStroke;
     ctx.strokeStyle = options.lineColor;
     ctx.stroke();
@@ -125,7 +125,7 @@ export function drawChartLine<P extends IPathData & IPoint, O extends IDrawLineO
 
   if (options.pointRadius > 0) {
     ctx.fillStyle = options.lineColor;
-    paths.forEach(({ x, y }, i, self) => {
+    drawData.forEach(({ x, y }, i, self) => {
       if (i !== 0 && i !== self.length - 1) {
         ctx.beginPath();
         ctx.arc(x, y, options.pointRadius, 0, Math.PI * 2);
@@ -137,13 +137,13 @@ export function drawChartLine<P extends IPathData & IPoint, O extends IDrawLineO
   return params;
 }
 
-export function drawBars<P extends IPathBarData, O extends IDrawBarOptions>(skipLeft = 0) {
+export function drawBars<P extends IDrawBarData, O extends IDrawBarOptions>(skipLeft = 0) {
   return (params: IParams<P, O>) => {
     const { canvas, options: { barColors } } = params;
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    params.paths.slice(skipLeft).forEach((item) => {
-      item.pillars.forEach((path, i) => {
+    params.drawData.slice(skipLeft).forEach((item) => {
+      item.bars.forEach((path, i) => {
         ctx.fillStyle = barColors[Math.min(i, barColors.length - 1)];
         ctx.fill(path);
       })

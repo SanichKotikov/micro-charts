@@ -14,7 +14,7 @@ export function createPieChart(
   setupCanvas(canvas, opt.size, opt.size, opt.ratio);
 
   const paths = calc(data, opt);
-  const params: IParams<IPieChartSlice, IPieChartOptions> = { canvas, paths, options: opt };
+  const params: IParams<IPieChartSlice, IPieChartOptions> = { canvas, drawData: paths, options: opt };
 
   draw(params);
 

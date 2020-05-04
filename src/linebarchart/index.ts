@@ -23,7 +23,7 @@ export function createLineBarChart(
   const paths = calcData(data, opt);
   const params: IParams<IData, IOptions> = {
     canvas,
-    paths,
+    drawData: paths,
     options: opt,
     columns: getColumns(data.slice(1))
   };

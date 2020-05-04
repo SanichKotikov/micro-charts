@@ -1,21 +1,28 @@
-export interface IPathData<T = any> {
-  path: Path2D;
+export interface IDrawData<T = any> {
+  mask: Path2D;
   data: Readonly<T>;
 }
 
-export interface IPathBarData<T = any> extends IPathData<T> {
-  pillars: ReadonlyArray<Path2D>;
+export interface IDrawBarData<T = any> extends IDrawData<T> {
+  bars: ReadonlyArray<Path2D>;
+}
+
+export interface ICanvas {
+  ratio: number;
 }
 
 export interface IEventHandlers<C = Function, H = Function> {
-  ratio: number;
   onClick?: C;
   onHoverChange?: H;
 }
 
-export interface IParams<P extends IPathData, O extends IEventHandlers> {
+export interface IHoverOptions {
+  hoverColor: string;
+}
+
+export interface IParams<P extends IDrawData, O extends IEventHandlers> {
   canvas: HTMLCanvasElement;
-  paths: ReadonlyArray<Readonly<P>>;
+  drawData: ReadonlyArray<Readonly<P>>;
   options: Readonly<O>;
   columns?: ReadonlyArray<string>;
 }
@@ -44,9 +51,9 @@ export interface IFooterOptions {
   footer: number;
 }
 
-export interface ILevelOptions {
-  top?: number;
-  bottom?: number;
+export type IGeometry = ISize & IPadding & IEdges & IFooterOptions;
+
+export interface IRowOptions {
   rowCount: number;
   rowStroke: number;
   rowColor: string;
@@ -74,19 +81,11 @@ export interface IBarOptions {
   barRadius: number;
 }
 
-export interface IDrawLevelOptions extends IEventHandlers, ILevelOptions, ISize, IPadding {
-  top: number;
-  bottom: number;
-  footer: number;
-}
+export type IDrawBarOptions = IEventHandlers & IBarOptions;
+export type IDrawLevelOptions = IEventHandlers & IRowOptions & IGeometry;
+export type IDrawLineOptions = IDrawLevelOptions & ILineOptions;
 
-export interface IDrawBarOptions extends IEventHandlers, IBarOptions {}
-
-export interface IDrawLineOptions extends IEventHandlers, ILevelOptions, ISize, IPadding, ILineOptions {
-  footer: number;
-}
-
-export interface IHoverRenderData<P extends IPathData> {
+export interface IHoverRenderData<P extends IDrawData> {
   items: ReadonlyArray<Readonly<P>>;
   fill: (color?: string) => string;
 }

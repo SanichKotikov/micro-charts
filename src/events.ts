@@ -1,7 +1,7 @@
-import { IPathData, IParams, IEventHandlers, IHoverRenderData } from './types';
+import { IDrawData, ICanvas, IParams, IEventHandlers, IHoverRenderData } from './types';
 import { getCanvasPoint } from './core';
 
-export function subscriber<P extends IPathData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
+export function subscriber<P extends IDrawData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
   const { canvas } = params;
   return (
     event: string,
@@ -14,7 +14,7 @@ export function subscriber<P extends IPathData, O extends IEventHandlers>(params
   };
 }
 
-function clickHandler<P extends IPathData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
+function clickHandler<P extends IDrawData, O extends IEventHandlers & ICanvas>(params: Readonly<IParams<P, O>>) {
   const canvas = params.canvas;
   const { ratio, onClick } = params.options;
 
@@ -24,10 +24,10 @@ function clickHandler<P extends IPathData, O extends IEventHandlers>(params: Rea
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     const [cX, cY] = getCanvasPoint(canvas, ratio, event);
 
-    for (let i = 0; i < params.paths.length; i++) {
-      const { path, data } = params.paths[i];
+    for (let i = 0; i < params.drawData.length; i++) {
+      const { mask, data } = params.drawData[i];
 
-      if (ctx.isPointInPath(path, cX, cY)) {
+      if (ctx.isPointInPath(mask, cX, cY)) {
         onClick(data);
         return;
       }
@@ -35,7 +35,7 @@ function clickHandler<P extends IPathData, O extends IEventHandlers>(params: Rea
   };
 }
 
-function moveHandler<P extends IPathData, O extends IEventHandlers>(
+function moveHandler<P extends IDrawData, O extends IEventHandlers & ICanvas>(
   drawFunc: (params: Readonly<IParams<P, O>>) => void,
   getData: () => IHoverRenderData<P>,
 ) {
@@ -55,11 +55,11 @@ function moveHandler<P extends IPathData, O extends IEventHandlers>(
       const { items, fill } = getData();
 
       for (let i = 0; i < items.length; i++) {
-        const { data, path } = items[i];
+        const { data, mask } = items[i];
 
-        if (ctx.isPointInPath(path, cX, cY)) {
+        if (ctx.isPointInPath(mask, cX, cY)) {
           ctx.fillStyle = fill(data.color);
-          ctx.fill(path);
+          ctx.fill(mask);
           cursor = 'pointer';
           found = data;
           break;
@@ -73,7 +73,7 @@ function moveHandler<P extends IPathData, O extends IEventHandlers>(
   }
 }
 
-function leaveHandler<P extends IPathData, O extends IEventHandlers>(
+function leaveHandler<P extends IDrawData, O extends IEventHandlers>(
   drawFunc: (params: Readonly<IParams<P, O>>) => void,
 ) {
   return (params: Readonly<IParams<P, O>>) => {
@@ -88,7 +88,7 @@ function leaveHandler<P extends IPathData, O extends IEventHandlers>(
   }
 }
 
-export function setupEvents<P extends IPathData, O extends IEventHandlers>(
+export function setupEvents<P extends IDrawData, O extends IEventHandlers & ICanvas>(
   params: Readonly<IParams<P, O>>,
   drawFunc: (params: Readonly<IParams<P, O>>) => void,
   getData: () => IHoverRenderData<P>,

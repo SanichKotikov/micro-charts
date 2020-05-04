@@ -1,15 +1,15 @@
 import {
   IPoint,
-  IPathBarData,
+  IDrawBarData,
+  ICanvas,
   IHoverData,
   IEventHandlers,
-  ILevelOptions,
+  IHoverOptions,
+  IRowOptions,
   ILineOptions,
   IBarOptions,
-  IPadding,
-  ISize,
   IEdges,
-  IFooterOptions,
+  IGeometry,
 } from '../types';
 
 export interface ILineBarData {
@@ -19,14 +19,19 @@ export interface ILineBarData {
   label?: string;
 }
 
-export type IData = IPathBarData<ILineBarData> & IPoint;
+export type IData = IDrawBarData<ILineBarData> & IPoint;
 
 export type LineChartClickHandler = (data: Readonly<ILineBarData>) => void;
 export type LineChartHoverHandler = (value?: IHoverData<Readonly<ILineBarData>>) => void;
 type EventHandlers = IEventHandlers<LineChartClickHandler, LineChartHoverHandler>;
 
-export interface ILineBarOptions extends EventHandlers, ILevelOptions, ILineOptions, IBarOptions {
-  hoverColor: string;
-}
+export type ILineBarOptions =
+  ICanvas &
+  EventHandlers &
+  IHoverOptions &
+  Partial<IEdges> &
+  IRowOptions &
+  ILineOptions &
+  IBarOptions;
 
-export type IOptions = ILineBarOptions & IPadding & ISize & IEdges & IFooterOptions;
+export type IOptions = ILineBarOptions & IGeometry;

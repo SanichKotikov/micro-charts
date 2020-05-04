@@ -91,9 +91,9 @@ export function calc(
   const center = options.size / 2;
 
   if (data.length === 1) {
-    const path = new Path2D();
-    path.arc(center, center, center, 0, CIRCLE);
-    return [{ data: data[0], path }];
+    const mask = new Path2D();
+    mask.arc(center, center, center, 0, CIRCLE);
+    return [{ data: data[0], mask }];
   }
 
   const template = calcTemplate(data, options);
@@ -105,23 +105,23 @@ export function calc(
     if (!tpl) throw new Error();
     const end = start + tpl.angle;
 
-    let path = new Path2D();
+    let mask = new Path2D();
 
     if (!options.round) {
-      path.moveTo(center, center);
-      path.arc(center, center, tpl.radius, start, end);
-      path.closePath();
+      mask.moveTo(center, center);
+      mask.arc(center, center, tpl.radius, start, end);
+      mask.closePath();
     } else {
-      path = getRoundedPath(center, tpl, start, end);
+      mask = getRoundedPath(center, tpl, start, end);
     }
 
     start = end;
-    return { data: item, path };
+    return { data: item, mask };
   });
 }
 
 export function draw(params: Readonly<IParams<IPieChartSlice, IPieChartOptions>>) {
-  const { canvas, paths, options } = params;
+  const { canvas, drawData, options } = params;
   clearCanvas(canvas, canvas.width, canvas.height);
 
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -129,9 +129,9 @@ export function draw(params: Readonly<IParams<IPieChartSlice, IPieChartOptions>>
   ctx.lineWidth = options.stroke;
   ctx.strokeStyle = STROKE_COLOR;
 
-  paths.forEach((item) => {
+  drawData.forEach((item) => {
     ctx.fillStyle = item.data.color;
-    ctx.fill(item.path);
-    if (options.stroke > 0) ctx.stroke(item.path);
+    ctx.fill(item.mask);
+    if (options.stroke > 0) ctx.stroke(item.mask);
   });
 }

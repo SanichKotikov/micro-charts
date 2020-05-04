@@ -21,7 +21,7 @@ export function createLineChart(
   const paths = calcPoints(data, opt);
   const params: IParams<ILineData, IOptions> = {
     canvas,
-    paths,
+    drawData: paths,
     options: opt,
     columns: getColumns(data.slice(1)),
   };

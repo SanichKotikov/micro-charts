@@ -1,13 +1,13 @@
 import {
-  IPathBarData,
-  ISize,
-  IPadding,
+  IDrawBarData,
+  ICanvas,
   IEdges,
-  IFooterOptions,
-  ILevelOptions,
+  IGeometry,
+  IRowOptions,
   IBarOptions,
   IHoverData,
   IEventHandlers,
+  IHoverOptions,
 } from '../types';
 
 export interface IBarChartData {
@@ -16,14 +16,11 @@ export interface IBarChartData {
   label?: string;
 }
 
-export type IBarData = IPathBarData<IBarChartData>;
+export type IBarData = IDrawBarData<IBarChartData>;
 
 export type BarChartClickHandler = (data: Readonly<IBarChartData>) => void;
 export type BarChartHoverHandler = (value?: IHoverData<Readonly<IBarChartData>>) => void;
 type EventHandlers = IEventHandlers<BarChartClickHandler, BarChartHoverHandler>;
 
-export interface IBarChartOptions extends EventHandlers, ILevelOptions, IBarOptions {
-  hoverColor: string;
-}
-
-export type IOptions = IBarChartOptions & IPadding & ISize & IEdges & IFooterOptions;
+export type IBarChartOptions = ICanvas & EventHandlers & IHoverOptions & Partial<IEdges> & IRowOptions & IBarOptions;
+export type IOptions = IBarChartOptions & IGeometry;
