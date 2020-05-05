@@ -1,13 +1,11 @@
 # micro-charts
 
-A tiny library for visualizing your data. With zero dependencies.
+A tiny (~3.59 KB) library for visualizing your data. With zero dependencies.
 
-- LineCharts (~2.42 KB)
-- BarChart (~2.29 KB)
-- LineCharts + BarChart (~2.62 KB)
+- LineCharts (~2.48 KB)
+- BarChart (~2.37 KB)
+- LineCharts + BarChart (~2.71 KB)
 - PieCharts (~1.34 KB)
-
-3.58
 
 \* Minified and gzipped (by [Size Limit](https://github.com/ai/size-limit))
 

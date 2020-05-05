@@ -1,4 +1,4 @@
-import { IPadding, IEdges } from './types';
+import { IPadding, IEdges, IRowOptions, IGeometry, IBarOptions } from './types';
 
 export function pipe(...fus: Function[]) {
   return <T>(init: T) => fus.reduce((res, fn) => fn(res), init);
@@ -70,6 +70,22 @@ export function getColumns<T extends { label?: string }>(data: ReadonlyArray<Rea
   return hasFooter(data) ? data.map(item => (item.label || '') as string) : undefined;
 }
 
+export function calcFactors<O extends IRowOptions & IGeometry>(options: O, dataCount: number) {
+  const { width, height, top, bottom, rowFont, rowFontSize, rowMargin, sPadding, vPadding, footer } = options;
+
+  const head = rowFont ? rowFontSize : 0;
+  const left = sPadding + rowMargin;
+
+  const W = (width - left) / dataCount;
+  const H = calcH(height, vPadding, head, footer) / (top - bottom);
+
+  return {
+    W, H, head, footer: height - footer,
+    calcX: (idx: number) => (idx * W) + left,
+    calcY: (value: number) => (top - value) * H + vPadding + head,
+  };
+}
+
 export function getLinePath(x1: number, y1: number, x2: number, y2: number) {
   const path = new Path2D();
   path.moveTo(x1, y1);
@@ -124,6 +140,23 @@ export function getBarPath(x: number, y: number, w: number, b: number, r: number
   path.closePath();
 
   return path;
+}
+
+export function getBarFunc<O extends IBarOptions & IGeometry>(options: O, W: number, H: number, head: number) {
+  const { height, top, bottom, vPadding, footer, barWidth, barMargin, barRadius } = options;
+  const bW = barWidth + (barMargin * 2);
+
+  return (values: ReadonlyArray<number>, x: number) => {
+    const shift = (W - (bW * values.length)) / 2;
+
+    return values.map((value, idx) => {
+      if (value <= bottom) return new Path2D();
+
+      const pX = x + shift + (idx * bW) + barMargin;
+      const pY = (top - value) * H + vPadding + head;
+      return getBarPath(pX, pY, barWidth, height - footer, barRadius);
+    });
+  };
 }
 
 export function getCanvasPoint(canvas: HTMLCanvasElement, ratio: number, event: MouseEvent) {
