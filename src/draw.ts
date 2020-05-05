@@ -1,4 +1,12 @@
-import { IDrawData, IDrawBarData, IParams, IPoint, IDrawLevelOptions, IDrawBarOptions, IDrawLineOptions } from './types';
+import {
+  IDrawData,
+  IDrawBarData,
+  IParams,
+  IPoint,
+  IDrawLevelOptions,
+  IDrawBarOptions,
+  IDrawLineOptions,
+} from './types';
 import { getFontStr, calcH, getLinePath, getRectPath } from './core';
 
 export function setupCanvas(canvas: HTMLCanvasElement, ratio: number) {
@@ -7,13 +15,11 @@ export function setupCanvas(canvas: HTMLCanvasElement, ratio: number) {
   canvas.width = width * ratio;
   canvas.height = height * ratio;
 
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.scale(ratio, ratio);
+  (canvas.getContext('2d') as CanvasRenderingContext2D).scale(ratio, ratio);
 }
 
 export function clearCanvas(canvas: HTMLCanvasElement, width: number, height: number) {
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-  ctx.clearRect(0, 0, width, height);
+  (canvas.getContext('2d') as CanvasRenderingContext2D).clearRect(0, 0, width, height);
 }
 
 export function drawLabel(
@@ -61,14 +67,14 @@ export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
   const step = (top - bottom) / count;
   const { rowMargin, rowSkeleton, rowFontAlign } = options;
 
-  const l = sPadding + rowMargin;
+  const left = sPadding + rowMargin;
   const x = rowFontAlign === 'right' ? sPadding : 0;
 
   setRowStyle(params);
 
   for (let i = 0; i < count; i++) {
     const y = (i * H) + vPadding + head;
-    ctx.stroke(getLinePath(l, y, width, y));
+    ctx.stroke(getLinePath(left, y, width, y));
 
     if (rowFont) {
       const label = top - (step * i);
@@ -79,33 +85,30 @@ export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
   return params;
 }
 
+function getBackground(ctx: CanvasRenderingContext2D, fill: string | ReadonlyArray<string>, height: number) {
+  if (Array.isArray(fill) && fill.length == 1) return fill[0] as string;
+  if (Array.isArray(fill) && fill.length > 1) {
+    const step = 1 / (fill.length - 1);
+    const gradient = ctx.createLinearGradient(0, height, 0, 0);
+    fill.forEach((item, i) => {
+      gradient.addColorStop(i * step, item);
+    });
+    return gradient;
+  }
+  return fill as string;
+}
+
 export function drawChartFill<P extends IDrawData & IPoint, O extends IDrawLineOptions>(params: IParams<P, O>) {
   const { canvas, drawData, options } = params;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-
   const { height, width, sPadding, lineFill, rowMargin, footer } = options;
-  let background: string | CanvasGradient = 'transparent';
-
-  if (Array.isArray(lineFill)) {
-    if (lineFill.length == 1) background = lineFill[0];
-    else if (lineFill.length > 1) {
-      const step = 1 / (lineFill.length - 1);
-      const gradient = ctx.createLinearGradient(0, height, 0, 0);
-      lineFill.forEach((item, i) => {
-        gradient.addColorStop(i * step, item);
-      });
-      background = gradient;
-    }
-  } else {
-    background = lineFill as string;
-  }
 
   ctx.beginPath();
   ctx.lineTo(sPadding + rowMargin, height - footer);
   drawData.forEach(({ x, y }) => ctx.lineTo(x, y));
   ctx.lineTo(width, height - footer);
   ctx.closePath();
-  ctx.fillStyle = background;
+  ctx.fillStyle = getBackground(ctx, lineFill, height);
   ctx.fill();
 
   return params;
@@ -163,24 +166,24 @@ export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>)
   const { width, height, sPadding, footer, bottom, footerMargin } = options;
   const { rowMargin, rowFont, rowFontAlign, rowFontSize, rowSkeleton } = options;
 
-  const l = sPadding + rowMargin;
+  const left = sPadding + rowMargin;
   const x = rowFontAlign === 'right' ? sPadding : 0;
   const y = height - footer;
   const stroke = rowStroke / 2;
 
   setRowStyle(params, true);
 
-  ctx.stroke(getLinePath(l, y, width, y));
+  ctx.stroke(getLinePath(left, y, width, y));
   if (rowFont) drawLabel(ctx, rowSkeleton, bottom, x, y, sPadding, rowFontSize);
 
   const { columns } = params;
 
   if (typeof rowFont === 'string' && columns) {
-    const colW = (width - l) / (columns.length);
+    const colW = (width - left) / (columns.length);
     ctx.textAlign = 'center';
 
     columns.forEach((column, i) => {
-      const colX = i * colW + l + stroke;
+      const colX = i * colW + left + stroke;
       ctx.stroke(getLinePath(colX, y + stroke, colX, y + (footerMargin / 2)));
       const cX = colX + (colW / 2);
 
