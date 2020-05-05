@@ -24,6 +24,7 @@ createLineBarChart(
     barWidth: 14,
     barMargin: 0,
     barRadius: 0,
+    lineFill: ['rgba(130, 210, 255, 0)', 'rgba(130, 210, 255, 0.3)'],
     rowFont: 'system, -apple-system, BlinkMacSystemFont',
     rowFontAlign: 'right',
     onHoverChange: () => {},

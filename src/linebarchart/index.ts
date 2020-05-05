@@ -3,7 +3,7 @@ import { getOptions, getColumns, hasFooter } from '../core';
 import { setupCanvas } from '../draw';
 import { setupEvents } from '../events';
 import { ILineBarData, IData, ILineBarOptions, IOptions } from './types';
-import { OPTIONS } from './constants';
+import { OPTIONS } from './config';
 import { calcData } from './helpers';
 import { draw } from './draw';
 

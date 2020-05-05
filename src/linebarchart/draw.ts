@@ -6,5 +6,5 @@ import { IData, IOptions } from './types';
 export function draw(params: IParams<IData, IOptions>) {
   const { canvas, options: { width, height } } = params;
   clearCanvas(canvas, width, height);
-  pipe(drawRows, drawChartFill, drawChartLine, drawBars(1), drawFooter)(params);
+  pipe(drawChartFill, drawRows, drawChartLine, drawBars(1), drawFooter)(params);
 }

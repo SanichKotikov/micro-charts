@@ -13,7 +13,7 @@ import {
   RADIUS_MIN_BORDER,
   ROUND_STEP,
   STROKE_COLOR,
-} from './constants';
+} from './config';
 
 export function adjustColor(color: string, amount: number) {
   return '#' + color.replace(/^#/, '').replace(/../g, (color) => {

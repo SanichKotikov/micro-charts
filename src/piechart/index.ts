@@ -1,7 +1,7 @@
 import { IParams } from '../types';
 import { setupEvents } from '../events';
 import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
-import { OPTIONS } from './constants';
+import { OPTIONS } from './config';
 import { adjustColor, calc, draw } from './helpers';
 
 export function createPieChart(
