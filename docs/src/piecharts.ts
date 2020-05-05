@@ -10,7 +10,7 @@ const pieChartData = [
   { id: '6', percent: 1, color: '#CDDC39' },
 ];
 
-createPieChart(getCanvas('pie-chart-1'), pieChartData, { size: 160 });
-createPieChart(getCanvas('pie-chart-2'), pieChartData, { size: 160, stroke: 1 });
-createPieChart(getCanvas('pie-chart-3'), pieChartData, { size: 160, variable: true });
-createPieChart(getCanvas('pie-chart-4'), pieChartData, { size: 160, variable: true, round: 6 });
+createPieChart(getCanvas('pie-chart-1'), pieChartData);
+createPieChart(getCanvas('pie-chart-2'), pieChartData, { stroke: 1 });
+createPieChart(getCanvas('pie-chart-3'), pieChartData, { variable: true });
+createPieChart(getCanvas('pie-chart-4'), pieChartData, { variable: true, round: 6 });

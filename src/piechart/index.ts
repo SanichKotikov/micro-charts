@@ -1,5 +1,4 @@
 import { IParams } from '../types';
-import { setupCanvas } from '../draw';
 import { setupEvents } from '../events';
 import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
 import { OPTIONS } from './constants';
@@ -11,7 +10,10 @@ export function createPieChart(
   options: Partial<Readonly<IPieChartOptions>> = {},
 ) {
   const opt: Readonly<IPieChartOptions> = { ...OPTIONS, ...options };
-  setupCanvas(canvas, opt.size, opt.size, opt.ratio);
+
+  canvas.width = opt.size * opt.ratio;
+  canvas.height = opt.size * opt.ratio;
+  (canvas.getContext('2d') as CanvasRenderingContext2D).scale(opt.ratio, opt.ratio);
 
   const paths = calc(data, opt);
   const params: IParams<IPieChartSlice, IPieChartOptions> = { canvas, drawData: paths, options: opt };

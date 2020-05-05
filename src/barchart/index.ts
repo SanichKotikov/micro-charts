@@ -18,7 +18,7 @@ export function createBarChart(
     .reduce((res, current) => [...res, ...current], []);
   const opt: Readonly<IOptions> = getOptions(canvas, custom, values, hasFooter(data));
 
-  setupCanvas(canvas, opt.width, opt.height, opt.ratio);
+  setupCanvas(canvas, opt.ratio);
 
   const paths = calcData(data, opt);
   const params: IParams<IBarData, IOptions> = { canvas, drawData: paths, options: opt, columns: getColumns(data) };

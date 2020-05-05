@@ -1,9 +1,9 @@
 import { IDrawData, IDrawBarData, IParams, IPoint, IDrawLevelOptions, IDrawBarOptions, IDrawLineOptions } from './types';
 import { getFontStr, calcH, getLinePath, getRectPath } from './core';
 
-export function setupCanvas(canvas: HTMLCanvasElement, width: number, height: number, ratio: number) {
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
+export function setupCanvas(canvas: HTMLCanvasElement, ratio: number) {
+  const { width, height } = canvas.getBoundingClientRect();
+
   canvas.width = width * ratio;
   canvas.height = height * ratio;
 

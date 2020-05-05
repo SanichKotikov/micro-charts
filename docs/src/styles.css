@@ -58,3 +58,13 @@ section {
 h3 {
   font-weight: 400;
 }
+
+.canvas {
+  width: 300px;
+  height: 150px;
+}
+
+.piechart {
+  width: 160px;
+  height: 160px;
+}

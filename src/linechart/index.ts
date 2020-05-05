@@ -16,7 +16,7 @@ export function createLineChart(
   const values = data.map(item => item.value);
   const opt: Readonly<IOptions> = getOptions(canvas, custom, values, hasFooter(data));
 
-  setupCanvas(canvas, opt.width, opt.height, opt.ratio);
+  setupCanvas(canvas, opt.ratio);
 
   const paths = calcPoints(data, opt);
   const params: IParams<ILineData, IOptions> = {

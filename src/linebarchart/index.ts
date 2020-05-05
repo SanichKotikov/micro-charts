@@ -18,7 +18,7 @@ export function createLineBarChart(
     .reduce((res, current) => [...res, ...current], []);
   const opt = getOptions(canvas, custom, values, hasFooter(data));
 
-  setupCanvas(canvas, opt.width, opt.height, opt.ratio);
+  setupCanvas(canvas, opt.ratio);
 
   const paths = calcData(data, opt);
   const params: IParams<IData, IOptions> = {
