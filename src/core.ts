@@ -52,6 +52,10 @@ export function calcPadding(
   };
 }
 
+export function getFontMargin(size: number) {
+  return Math.ceil(size * 20 / 100); // 20% of font size
+}
+
 export function getOptions(
   canvas: HTMLCanvasElement,
   options: Readonly<any>,
@@ -61,7 +65,7 @@ export function getOptions(
   const edges = calcEdges(values, options.top, options.bottom);
   const { rowStroke, rowFont, rowFontSize, footerMargin } = options;
   const padding = calcPadding(canvas, edges, rowStroke, rowFontSize, rowFont);
-  const footer = hasFooter ? rowFontSize + footerMargin : 0;
+  const footer = hasFooter ? rowFontSize + getFontMargin(rowFontSize) + footerMargin : 0;
   const { width, height } = canvas;
   return { ...options, width, height, ...edges, ...padding, footer };
 }

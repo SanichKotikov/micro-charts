@@ -180,6 +180,8 @@ export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>)
 
   if (typeof rowFont === 'string' && columns) {
     const colW = (width - left) / (columns.length);
+    const fontTop = y + footerMargin;
+    const fY = fontTop + rowFontSize;
     ctx.textAlign = 'center';
 
     columns.forEach((column, i) => {
@@ -189,8 +191,8 @@ export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>)
 
       if (rowSkeleton) {
         const sW = colW / 3;
-        ctx.fill(getRectPath(cX - (sW / 2), height - rowFontSize, sW, rowFontSize, 2));
-      } else ctx.fillText(column, cX, height);
+        ctx.fill(getRectPath(cX - (sW / 2), fontTop, sW, rowFontSize, 2));
+      } else ctx.fillText(column, cX, fY);
     });
 
     const lX = width - stroke;
