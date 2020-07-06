@@ -40,6 +40,7 @@ createLineBarChart(
     barWidth: 8,
     barMargin: 0.5,
     lineStroke: 0.5,
+    lineSmooth: true,
     lineColor: 'red',
     lineFill: 'transparent',
     pointRadius: 1.5,

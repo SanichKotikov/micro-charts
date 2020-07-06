@@ -69,6 +69,7 @@ export interface IRowOptions {
 
 export interface ILineOptions {
   lineStroke: number;
+  lineSmooth?: boolean;
   lineColor: string;
   lineFill: string | ReadonlyArray<string>;
   pointRadius: number;

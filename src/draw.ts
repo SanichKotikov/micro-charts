@@ -98,6 +98,30 @@ function getBackground(ctx: CanvasRenderingContext2D, fill: string | ReadonlyArr
   return fill as string;
 }
 
+function drawCurvePath<P extends IPoint>(
+  ctx: CanvasRenderingContext2D,
+  points: ReadonlyArray<Readonly<P>>,
+  smooth = false,
+) {
+  if (!smooth) {
+    points.forEach(({ x, y }) => ctx.lineTo(x, y));
+    return;
+  }
+
+  ctx.lineTo((points[0].x), points[0].y);
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const curr = points[i];
+    const next = points[i + 1];
+
+    const midX = (curr.x + next.x) / 2;
+    const midY = (curr.y + next.y) / 2;
+
+    ctx.quadraticCurveTo((midX + curr.x) / 2, curr.y, midX, midY);
+    ctx.quadraticCurveTo((midX + next.x) / 2, next.y, next.x, next.y);
+  }
+}
+
 export function drawChartFill<P extends IDrawData & IPoint, O extends IDrawLineOptions>(params: IParams<P, O>) {
   const { canvas, drawData, options } = params;
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -105,7 +129,7 @@ export function drawChartFill<P extends IDrawData & IPoint, O extends IDrawLineO
 
   ctx.beginPath();
   ctx.lineTo(sPadding + rowMargin, height - footer);
-  drawData.forEach(({ x, y }) => ctx.lineTo(x, y));
+  drawCurvePath(ctx, drawData, options.lineSmooth);
   ctx.lineTo(width, height - footer);
   ctx.closePath();
   ctx.fillStyle = getBackground(ctx, lineFill, height);
@@ -120,7 +144,7 @@ export function drawChartLine<P extends IDrawData & IPoint, O extends IDrawLineO
 
   if (options.lineStroke > 0) {
     ctx.beginPath();
-    drawData.forEach(({ x, y }) => ctx.lineTo(x, y));
+    drawCurvePath(ctx, drawData, options.lineSmooth);
     ctx.lineWidth = options.lineStroke;
     ctx.strokeStyle = options.lineColor;
     ctx.stroke();

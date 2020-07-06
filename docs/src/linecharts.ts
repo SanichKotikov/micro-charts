@@ -13,10 +13,11 @@ createLineChart(getCanvas('line-chart-1'), getData(10), {
   bottom: 0,
 });
 
-createLineChart(getCanvas('line-chart-2'), getData(60), {
+createLineChart(getCanvas('line-chart-2'), getData(6), {
   lineStroke: 0.5,
+  lineSmooth: true,
   lineColor: 'red',
-  lineFill: 'transparent',
+  lineFill: ['rgba(255, 193, 7, 0)', 'rgba(255, 193, 7, 0.3)'],
   pointRadius: 1.5,
   rowCount: 4,
   rowStroke: 0.2,
