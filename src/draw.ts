@@ -1,13 +1,13 @@
 import {
-  IDrawData,
   IDrawBarData,
+  IDrawBarOptions,
+  IDrawData,
+  IDrawLevelOptions,
+  IDrawLineOptions,
   IParams,
   IPoint,
-  IDrawLevelOptions,
-  IDrawBarOptions,
-  IDrawLineOptions,
 } from './types';
-import { getFontStr, calcH, getLinePath, getRectPath } from './core';
+import { calcH, getFontStr, getLinePath, getRectPath } from './core';
 
 export function setupCanvas(canvas: HTMLCanvasElement, ratio: number) {
   const { width, height } = canvas.getBoundingClientRect();
@@ -108,7 +108,7 @@ function drawCurvePath<P extends IPoint>(
     return;
   }
 
-  ctx.lineTo((points[0].x), points[0].y);
+  ctx.lineTo(points[0].x, points[0].y);
 
   for (let i = 0; i < points.length - 1; i++) {
     const curr = points[i];
@@ -173,7 +173,7 @@ export function drawBars<P extends IDrawBarData, O extends IDrawBarOptions>(skip
       item.bars.forEach((path, i) => {
         ctx.fillStyle = barColors[Math.min(i, barColors.length - 1)];
         ctx.fill(path);
-      })
+      });
     });
 
     return params;
@@ -216,7 +216,8 @@ export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>)
       if (rowSkeleton) {
         const sW = colW / 3;
         ctx.fill(getRectPath(cX - (sW / 2), fontTop, sW, rowFontSize, 2));
-      } else ctx.fillText(column, cX, fY);
+      }
+      else ctx.fillText(column, cX, fY);
     });
 
     const lX = width - stroke;

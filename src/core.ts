@@ -1,4 +1,4 @@
-import { IPadding, IEdges, IRowOptions, IGeometry, IBarOptions } from './types';
+import { IBarOptions, IEdges, IGeometry, IPadding, IRowOptions } from './types';
 
 export function pipe(...fus: Function[]) {
   return <T>(init: T) => fus.reduce((res, fn) => fn(res), init);
@@ -22,7 +22,7 @@ export function calcEdges(values: number[], top?: number, bottom?: number): Read
   const shift = (upper - lower) * 5 / 100;
 
   if (typeof top !== 'number') upper = Math.ceil(upper + shift);
-  if (typeof bottom !== 'number') lower = Math.floor(lower - shift)
+  if (typeof bottom !== 'number') lower = Math.floor(lower - shift);
 
   return { top: upper, bottom: lower };
 }

@@ -1,4 +1,4 @@
-import { IRowOptions, ILineOptions, IBarOptions } from './types';
+import { IBarOptions, ILineOptions, IRowOptions } from './types';
 
 export const HOVER_COLOR = 'rgba(80, 140, 255, 0.05)';
 

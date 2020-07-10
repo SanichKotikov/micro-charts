@@ -1,8 +1,8 @@
 import { IParams } from '../types';
-import { getOptions, getColumns, hasFooter } from '../core';
+import { getColumns, getOptions, hasFooter } from '../core';
 import { setupCanvas } from '../draw';
 import { setupEvents } from '../events';
-import { ILineBarData, IData, ILineBarOptions, IOptions } from './types';
+import { IData, ILineBarData, ILineBarOptions, IOptions } from './types';
 import { OPTIONS } from './config';
 import { calcData } from './helpers';
 import { draw } from './draw';
@@ -14,7 +14,7 @@ export function createLineBarChart(
 ) {
   const custom: Readonly<ILineBarOptions> = { ...OPTIONS, ...options };
   const values = data
-    .map(item => [ item.value, ...item.bars ])
+    .map(item => [item.value, ...item.bars])
     .reduce((res, current) => [...res, ...current], []);
   const opt = getOptions(canvas, custom, values, hasFooter(data));
 
@@ -25,7 +25,7 @@ export function createLineBarChart(
     canvas,
     drawData: paths,
     options: opt,
-    columns: getColumns(data.slice(1))
+    columns: getColumns(data.slice(1)),
   };
 
   draw(params);

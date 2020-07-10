@@ -1,6 +1,6 @@
 import { IParams } from '../types';
 import { setupEvents } from '../events';
-import { IPieChartData, IPieChartSlice, IPieChartOptions } from './types';
+import { IPieChartData, IPieChartOptions, IPieChartSlice } from './types';
 import { OPTIONS } from './config';
 import { adjustColor, calc, draw } from './helpers';
 

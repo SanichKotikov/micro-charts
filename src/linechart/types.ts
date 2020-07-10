@@ -1,14 +1,14 @@
 import {
-  IDrawData,
   ICanvas,
-  IPoint,
+  IDrawData,
   IEdges,
-  IGeometry,
-  IRowOptions,
-  IHoverData,
   IEventHandlers,
+  IGeometry,
+  IHoverData,
   IHoverOptions,
   ILineOptions,
+  IPoint,
+  IRowOptions,
 } from '../types';
 
 export interface ILineChartData {

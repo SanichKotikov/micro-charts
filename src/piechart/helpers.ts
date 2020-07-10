@@ -1,19 +1,7 @@
 import { IParams } from '../types';
 import { clearCanvas } from '../draw';
-import {
-  IPieChartData,
-  IPieChartOptions,
-  IPieChartTemplate,
-  IPieChartSlice,
-} from './types';
-import {
-  CIRCLE,
-  START_ANGLE,
-  RADIUS_STEP,
-  RADIUS_MIN_BORDER,
-  ROUND_STEP,
-  STROKE_COLOR,
-} from './config';
+import { IPieChartData, IPieChartOptions, IPieChartSlice, IPieChartTemplate } from './types';
+import { CIRCLE, RADIUS_MIN_BORDER, RADIUS_STEP, ROUND_STEP, START_ANGLE, STROKE_COLOR } from './config';
 
 export function adjustColor(color: string, amount: number) {
   return '#' + color.replace(/^#/, '').replace(/../g, (color) => {
@@ -111,7 +99,8 @@ export function calc(
       mask.moveTo(center, center);
       mask.arc(center, center, tpl.radius, start, end);
       mask.closePath();
-    } else {
+    }
+    else {
       mask = getRoundedPath(center, tpl, start, end);
     }
 

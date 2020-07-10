@@ -1,15 +1,15 @@
 import {
-  IPoint,
-  IDrawBarData,
-  ICanvas,
-  IHoverData,
-  IEventHandlers,
-  IHoverOptions,
-  IRowOptions,
-  ILineOptions,
   IBarOptions,
+  ICanvas,
+  IDrawBarData,
   IEdges,
+  IEventHandlers,
   IGeometry,
+  IHoverData,
+  IHoverOptions,
+  ILineOptions,
+  IPoint,
+  IRowOptions,
 } from '../types';
 
 export interface ILineBarData {

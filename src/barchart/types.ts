@@ -1,13 +1,13 @@
 import {
-  IDrawBarData,
-  ICanvas,
-  IEdges,
-  IGeometry,
-  IRowOptions,
   IBarOptions,
-  IHoverData,
+  ICanvas,
+  IDrawBarData,
+  IEdges,
   IEventHandlers,
+  IGeometry,
+  IHoverData,
   IHoverOptions,
+  IRowOptions,
 } from '../types';
 
 export interface IBarChartData {

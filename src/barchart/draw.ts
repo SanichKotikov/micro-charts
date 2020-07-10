@@ -1,6 +1,6 @@
 import { IParams } from '../types';
 import { pipe } from '../core';
-import { clearCanvas, drawRows, drawBars, drawFooter } from '../draw';
+import { clearCanvas, drawBars, drawFooter, drawRows } from '../draw';
 import { IBarData, IOptions } from './types';
 
 export function draw(params: IParams<IBarData, IOptions>) {

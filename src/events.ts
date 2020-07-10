@@ -1,4 +1,4 @@
-import { IDrawData, ICanvas, IParams, IEventHandlers, IHoverRenderData } from './types';
+import { ICanvas, IDrawData, IEventHandlers, IHoverRenderData, IParams } from './types';
 import { getCanvasPoint } from './core';
 
 export function subscriber<P extends IDrawData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
@@ -70,7 +70,7 @@ function moveHandler<P extends IDrawData, O extends IEventHandlers & ICanvas>(
       onHoverChange(found && { data: found, clientX, clientY });
       if (onClick) canvas.style.cursor = cursor;
     };
-  }
+  };
 }
 
 function leaveHandler<P extends IDrawData, O extends IEventHandlers>(
@@ -84,8 +84,8 @@ function leaveHandler<P extends IDrawData, O extends IEventHandlers>(
       drawFunc(params);
       if (onHoverChange) onHoverChange(undefined);
       if (onClick) canvas.style.cursor = 'default';
-    }
-  }
+    };
+  };
 }
 
 export function setupEvents<P extends IDrawData, O extends IEventHandlers & ICanvas>(
