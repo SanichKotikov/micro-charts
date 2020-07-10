@@ -1,53 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156521666-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-156521666-1');
-  </script>
-  <meta charset="UTF-8">
-  <title>micro-charts</title>
-  <meta name="description" content="A tiny JS library for visualizing your data">
-  <link rel="stylesheet" href="src/styles.css">
-</head>
-<body>
-<header class="header">
-  <h1>micro-charts</h1>
-  <p class="description">A tiny JS library for visualizing your data.</p>
-  <ul class="links">
-    <li class="link">
-      <a href="https://github.com/SanichKotikov/micro-charts">GitHub</a>
-    </li>
-    <li class="link">
-      <a href="https://www.npmjs.com/package/micro-charts">NPM</a>
-    </li>
-  </ul>
-</header>
-<section>
-  <h3>LineCharts</h3>
-  <canvas id="line-chart-1" class="canvas"></canvas>
-  <canvas id="line-chart-2" class="canvas"></canvas>
-</section>
-<section>
-  <h3>BarCharts</h3>
-  <canvas id="bar-chart-1" class="canvas"></canvas>
-  <canvas id="bar-chart-2" class="canvas"></canvas>
-</section>
-<section>
-  <h3>LineCharts + BarCharts</h3>
-  <canvas id="line-bar-chart-1" class="canvas"></canvas>
-  <canvas id="line-bar-chart-2" class="canvas"></canvas>
-</section>
-<section>
-  <h3>PieCharts</h3>
-  <canvas id="pie-chart-1" class="piechart"></canvas>
-  <canvas id="pie-chart-2" class="piechart"></canvas>
-  <canvas id="pie-chart-3" class="piechart"></canvas>
-  <canvas id="pie-chart-4" class="piechart"></canvas>
-</section>
-<script src="src/index.ts"></script>
-</body>
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156521666-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {dataLayer.push(arguments);}
+
+      gtag('js', new Date());
+      gtag('config', 'UA-156521666-1');
+    </script>
+    <meta charset="UTF-8">
+    <title>micro-charts</title>
+    <meta name="description" content="A tiny JS library for visualizing your data">
+    <link rel="stylesheet" href="src/styles.css">
+  </head>
+  <body>
+    <header class="header">
+      <h1>micro-charts</h1>
+      <p class="description">A tiny JS library for visualizing your data.</p>
+      <ul class="links">
+        <li class="link">
+          <a href="https://github.com/SanichKotikov/micro-charts">GitHub</a>
+        </li>
+        <li class="link">
+          <a href="https://www.npmjs.com/package/micro-charts">NPM</a>
+        </li>
+      </ul>
+    </header>
+    <section>
+      <h3>LineCharts</h3>
+      <canvas id="line-chart-1" class="canvas"></canvas>
+      <canvas id="line-chart-2" class="canvas"></canvas>
+    </section>
+    <section>
+      <h3>BarCharts</h3>
+      <canvas id="bar-chart-1" class="canvas"></canvas>
+      <canvas id="bar-chart-2" class="canvas"></canvas>
+    </section>
+    <section>
+      <h3>LineCharts + BarCharts</h3>
+      <canvas id="line-bar-chart-1" class="canvas"></canvas>
+      <canvas id="line-bar-chart-2" class="canvas"></canvas>
+    </section>
+    <section>
+      <h3>PieCharts</h3>
+      <canvas id="pie-chart-1" class="piechart"></canvas>
+      <canvas id="pie-chart-2" class="piechart"></canvas>
+      <canvas id="pie-chart-3" class="piechart"></canvas>
+      <canvas id="pie-chart-4" class="piechart"></canvas>
+    </section>
+    <script src="src/index.ts"></script>
+  </body>
 </html>

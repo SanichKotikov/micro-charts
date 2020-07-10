@@ -6,7 +6,7 @@ function getData(count: number, bars: number) {
     id: i.toString(),
     value: getRandomData(1)[0],
     bars: getRandomData(bars),
-  }))
+  }));
 }
 
 createLineBarChart(
@@ -15,7 +15,7 @@ createLineBarChart(
     ...item,
     label: [
       i === 0 ? '0' : self[i - 1].value.toString(),
-      item.value.toString()
+      item.value.toString(),
     ].join(' - '),
   })),
   {
@@ -28,7 +28,7 @@ createLineBarChart(
     rowFont: 'system, -apple-system, BlinkMacSystemFont',
     rowFontAlign: 'right',
     onHoverChange: () => {},
-  }
+  },
 );
 
 createLineBarChart(
@@ -44,5 +44,5 @@ createLineBarChart(
     lineColor: 'red',
     lineFill: 'transparent',
     pointRadius: 1.5,
-  }
+  },
 );

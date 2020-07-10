@@ -3,7 +3,7 @@ import { createLineChart } from '../../src/linechart';
 
 function getData(count: number) {
   return getRandomData(count)
-    .map((value, i) => ({ id: i.toString(), value }))
+    .map((value, i) => ({ id: i.toString(), value }));
 }
 
 createLineChart(getCanvas('line-chart-1'), getData(10), {

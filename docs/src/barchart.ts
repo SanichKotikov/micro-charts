@@ -3,7 +3,7 @@ import { createBarChart } from '../../src/barchart';
 
 function getData(count: number, bars: number) {
   return Array.from(new Array(count))
-    .map((value, i) => ({ id: i.toString(), values: getRandomData(bars) }))
+    .map((value, i) => ({ id: i.toString(), values: getRandomData(bars) }));
 }
 
 createBarChart(
@@ -19,7 +19,7 @@ createBarChart(
     top: 100,
     bottom: 0,
     onHoverChange: () => {},
-  }
+  },
 );
 
 createBarChart(getCanvas('bar-chart-2'), getData(6, 3), {
