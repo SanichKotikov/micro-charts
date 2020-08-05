@@ -6,7 +6,7 @@
   "module": "lib/index.js",
   "sideEffects": false,
   "scripts": {
-    "size": "size-limit",
+    "size": "npm run build && size-limit",
     "start": "parcel docs/index.html --open",
     "docs": "rm -rf dist && parcel build docs/index.html --no-source-maps --public-url /micro-charts/",
     "build": "tsc",

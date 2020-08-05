@@ -1,4 +1,4 @@
-import { IBarChartOptions } from './types';
+import type { IBarChartOptions } from './types';
 import { BAR_OPTIONS, HOVER_COLOR, ROW_OPTIONS } from '../config';
 
 export const OPTIONS: Readonly<IBarChartOptions> = {

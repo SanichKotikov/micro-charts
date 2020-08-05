@@ -1,6 +1,6 @@
-import { IParams } from '../types';
+import type { IParams } from '../types';
 import { clearCanvas } from '../draw';
-import { IPieChartData, IPieChartOptions, IPieChartSlice, IPieChartTemplate } from './types';
+import type { IPieChartData, IPieChartOptions, IPieChartSlice, IPieChartTemplate } from './types';
 import { CIRCLE, RADIUS_MIN_BORDER, RADIUS_STEP, ROUND_STEP, START_ANGLE, STROKE_COLOR } from './config';
 
 export function adjustColor(color: string, amount: number) {

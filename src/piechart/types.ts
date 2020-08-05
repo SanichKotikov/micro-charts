@@ -1,4 +1,4 @@
-import { ICanvas, IDrawData, IEventHandlers, IHoverData } from '../types';
+import type { ICanvas, IDrawData, IEventHandlers, IHoverData } from '../types';
 
 export interface IPieChartData {
   id: string;

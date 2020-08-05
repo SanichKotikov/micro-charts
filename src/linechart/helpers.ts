@@ -1,5 +1,5 @@
 import { calcFactors } from '../core';
-import { ILineChartData, ILineData, IOptions } from './types';
+import type { ILineChartData, ILineData, IOptions } from './types';
 
 export function calcPoints(
   data: ReadonlyArray<Readonly<ILineChartData>>,

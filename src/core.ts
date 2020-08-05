@@ -1,4 +1,4 @@
-import { IBarOptions, IEdges, IGeometry, IPadding, IRowOptions } from './types';
+import type { IBarOptions, IEdges, IGeometry, IPadding, IRowOptions } from './types';
 
 export function pipe(...fus: Function[]) {
   return <T>(init: T) => fus.reduce((res, fn) => fn(res), init);

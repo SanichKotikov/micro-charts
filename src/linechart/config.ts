@@ -1,4 +1,4 @@
-import { ILineChartOptions } from './types';
+import type { ILineChartOptions } from './types';
 import { HOVER_COLOR, LINE_OPTIONS, ROW_OPTIONS } from '../config';
 
 export const OPTIONS: Readonly<ILineChartOptions> = {

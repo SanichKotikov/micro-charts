@@ -1,8 +1,8 @@
-import { IParams } from '../types';
+import type { IParams } from '../types';
 import { getColumns, getOptions, hasFooter } from '../core';
 import { setupCanvas } from '../draw';
 import { setupEvents } from '../events';
-import { IData, ILineBarData, ILineBarOptions, IOptions } from './types';
+import type { IData, ILineBarData, ILineBarOptions, IOptions } from './types';
 import { OPTIONS } from './config';
 import { calcData } from './helpers';
 import { draw } from './draw';

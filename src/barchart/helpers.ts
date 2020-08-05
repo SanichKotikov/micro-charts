@@ -1,5 +1,5 @@
 import { calcFactors, getBarFunc } from '../core';
-import { IBarChartData, IBarData, IOptions } from './types';
+import type { IBarChartData, IBarData, IOptions } from './types';
 
 export function calcData(
   data: ReadonlyArray<Readonly<IBarChartData>>,

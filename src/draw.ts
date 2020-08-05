@@ -1,4 +1,4 @@
-import {
+import type {
   IDrawBarData,
   IDrawBarOptions,
   IDrawData,

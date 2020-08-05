@@ -1,4 +1,4 @@
-import { IPieChartOptions } from './types';
+import type { IPieChartOptions } from './types';
 
 export const CIRCLE = Math.PI * 2;
 export const START_ANGLE = Math.PI * -0.5;

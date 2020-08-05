@@ -1,4 +1,4 @@
-import { ILineBarOptions } from './types';
+import type { ILineBarOptions } from './types';
 import { BAR_OPTIONS, HOVER_COLOR, LINE_OPTIONS, ROW_OPTIONS } from '../config';
 
 export const OPTIONS: Readonly<ILineBarOptions> = {

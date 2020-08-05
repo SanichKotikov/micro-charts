@@ -1,4 +1,4 @@
-import { ICanvas, IDrawData, IEventHandlers, IHoverRenderData, IParams } from './types';
+import type { ICanvas, IDrawData, IEventHandlers, IHoverRenderData, IParams } from './types';
 import { getCanvasPoint } from './core';
 
 export function subscriber<P extends IDrawData, O extends IEventHandlers>(params: Readonly<IParams<P, O>>) {
