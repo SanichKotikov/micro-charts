@@ -7,8 +7,8 @@
   "sideEffects": false,
   "scripts": {
     "size": "npm run build && size-limit",
-    "start": "parcel docs/index.html --open",
-    "docs": "rm -rf dist && parcel build docs/index.html --no-source-maps --public-url /micro-charts/",
+    "start": "webpack serve",
+    "docs": "rm -rf dist && NODE_ENV=production webpack",
     "build": "tsc",
     "predeploy": "npm run docs",
     "deploy": "gh-pages -d dist"
@@ -34,11 +34,17 @@
     "url": "https://github.com/SanichKotikov/micro-charts/issues"
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "4.5.5",
+    "@size-limit/preset-small-lib": "4.9.1",
+    "css-loader": "5.0.1",
     "gh-pages": "3.1.0",
-    "parcel-bundler": "1.12.4",
-    "size-limit": "4.5.5",
-    "typescript": "3.9.7"
+    "html-webpack-plugin": "4.5.0",
+    "mini-css-extract-plugin": "1.3.3",
+    "size-limit": "4.9.1",
+    "ts-loader": "8.0.12",
+    "typescript": "4.1.3",
+    "webpack": "5.11.0",
+    "webpack-cli": "4.2.0",
+    "webpack-dev-server": "3.11.0"
   },
   "size-limit": [
     {
