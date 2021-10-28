@@ -1,29 +1,35 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "baseUrl": "src",
     "target": "es2017",
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "lib": ["es2017", "dom"],
     "outDir": "lib",
+    "allowJs": false,
+    "skipLibCheck": true,
     "incremental": true,
     "isolatedModules": true,
-    "importsNotUsedAsValues": "error",
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "downlevelIteration": true,
-    "alwaysStrict": true,
-    "sourceMap": true,
-    "declaration": true,
-    "removeComments": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noImplicitReturns": true,
+    "alwaysStrict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "noImplicitAny": true,
-    "noImplicitThis": true
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
+    "sourceMap": true,
+    "declaration": true,
+    "removeComments": true
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

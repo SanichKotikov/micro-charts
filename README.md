@@ -2,7 +2,7 @@
 
 A tiny (~3.78 KB) library for visualizing your data. With zero dependencies.
 
-- LineCharts (~2.65 KB)
+- LineCharts (~2.66 KB)
 - BarChart (~2.46 KB)
 - LineCharts + BarChart (~2.89 KB)
 - PieCharts (~1.38 KB)

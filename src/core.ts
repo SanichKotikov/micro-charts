@@ -66,7 +66,7 @@ export function getOptions(
   const { rowStroke, rowFont, rowFontSize, footerMargin } = options;
   const padding = calcPadding(canvas, edges, rowStroke, rowFontSize, rowFont);
   const footer = hasFooter ? rowFontSize + getFontMargin(rowFontSize) + footerMargin : 0;
-  const { width, height } = canvas;
+  const { width, height } = canvas.getBoundingClientRect();
   return { ...options, width, height, ...edges, ...padding, footer };
 }
 
