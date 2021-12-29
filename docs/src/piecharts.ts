@@ -1,5 +1,5 @@
 import { getCanvas } from './helpers';
-import { createPieChart } from '../../src/piechart';
+import { createPieChart } from '../../src';
 
 const pieChartData = [
   { id: '1', percent: 45, color: '#4CAF50' },

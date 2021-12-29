@@ -63,6 +63,7 @@ export interface IRowOptions {
   rowSkeleton?: boolean;
   rowFontAlign: 'left' | 'right';
   rowFontColor?: string;
+  rowRenderValue?: (value: number) => string;
   footerColor?: string;
   footerMargin: number;
 }

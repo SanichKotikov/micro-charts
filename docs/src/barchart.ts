@@ -1,5 +1,5 @@
 import { getCanvas, getRandomData } from './helpers';
-import { createBarChart } from '../../src/barchart';
+import { createBarChart } from '../../src';
 
 function getData(count: number, bars: number) {
   return Array.from(new Array(count))
@@ -18,6 +18,7 @@ createBarChart(
     rowFontAlign: 'right',
     top: 100,
     bottom: 0,
+    rowRenderValue: (value: number) => `$${Math.round(value)}`,
     onHoverChange: () => {},
   },
 );

@@ -16,6 +16,12 @@ export function calcH(height: number, padding: number, head: number, footer: num
   return height - (padding * 2) - head - footer;
 }
 
+export function formatLabel(value: number, formatter?: (value: number) => string): string {
+  return typeof formatter === 'function'
+    ? formatter(value)
+    : String(Math.round(value));
+}
+
 export function calcEdges(values: number[], top?: number, bottom?: number): Readonly<IEdges> {
   let upper = top ?? Math.max.apply(null, values);
   let lower = bottom ?? Math.min.apply(null, values);
@@ -33,6 +39,7 @@ export function calcPadding(
   rowStroke: number,
   rowFontSize: number,
   rowFont?: string,
+  rowRenderValue?: (value: number) => string,
 ): Readonly<IPadding> {
   const stroke = rowStroke / 2;
   if (!rowFont) return { sPadding: 0, vPadding: stroke };
@@ -40,14 +47,12 @@ export function calcPadding(
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   ctx.font = getFontStr(rowFont, rowFontSize);
 
-  const labels = [edges.top, edges.bottom]
-    .map(num => Math.round(num).toString())
-    .sort((a, b) => b.length - a.length);
-
-  const { width } = ctx.measureText(labels[0]);
+  const maxLabelWidth = [edges.top, edges.bottom]
+    .map(num => ctx.measureText(formatLabel(num, rowRenderValue)).width)
+    .reduce((res, curr) => Math.max(res, curr), 0);
 
   return {
-    sPadding: Math.ceil(width),
+    sPadding: Math.ceil(maxLabelWidth),
     vPadding: Math.max(stroke),
   };
 }
@@ -63,8 +68,8 @@ export function getOptions(
   hasFooter: boolean,
 ): Readonly<any> {
   const edges = calcEdges(values, options.top, options.bottom);
-  const { rowStroke, rowFont, rowFontSize, footerMargin } = options;
-  const padding = calcPadding(canvas, edges, rowStroke, rowFontSize, rowFont);
+  const { rowStroke, rowFont, rowFontSize, rowRenderValue, footerMargin } = options;
+  const padding = calcPadding(canvas, edges, rowStroke, rowFontSize, rowFont, rowRenderValue);
   const footer = hasFooter ? rowFontSize + getFontMargin(rowFontSize) + footerMargin : 0;
   const { width, height } = canvas.getBoundingClientRect();
   return { ...options, width, height, ...edges, ...padding, footer };

@@ -1,5 +1,5 @@
 import { getCanvas, getRandomData } from './helpers';
-import { createLineBarChart } from '../../src/linebarchart';
+import { createLineBarChart } from '../../src';
 
 function getData(count: number, bars: number) {
   return Array.from(new Array(count)).map((_, i) => ({
@@ -27,6 +27,7 @@ createLineBarChart(
     lineFill: ['rgba(130, 210, 255, 0)', 'rgba(130, 210, 255, 0.3)'],
     rowFont: 'system, -apple-system, BlinkMacSystemFont',
     rowFontAlign: 'right',
+    rowRenderValue: (value: number) => `$${Math.round(value)}`,
     onHoverChange: () => {},
   },
 );

@@ -7,7 +7,7 @@ import type {
   IParams,
   IPoint,
 } from './types';
-import { calcH, getFontStr, getLinePath, getRectPath } from './core';
+import { calcH, formatLabel, getFontStr, getLinePath, getRectPath } from './core';
 
 export function setupCanvas(canvas: HTMLCanvasElement, ratio: number) {
   const { width, height } = canvas.getBoundingClientRect();
@@ -25,14 +25,14 @@ export function clearCanvas(canvas: HTMLCanvasElement, width: number, height: nu
 export function drawLabel(
   ctx: CanvasRenderingContext2D,
   skeleton: boolean | undefined,
-  value: number,
+  value: string,
   x: number,
   y: number,
   w: number,
   h: number,
 ) {
   if (skeleton) ctx.fill(getRectPath(0, y - h, w, h, 2));
-  else ctx.fillText(Math.round(value).toString(), x, y);
+  else ctx.fillText(value, x, y);
 }
 
 export function setRowStyle<O extends IDrawLevelOptions>(params: IParams<any, O>, isFooter = false) {
@@ -65,7 +65,7 @@ export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
   const H = calcH(height, vPadding, head, footer) / count;
 
   const step = (top - bottom) / count;
-  const { rowMargin, rowSkeleton, rowFontAlign } = options;
+  const { rowMargin, rowSkeleton, rowFontAlign, rowRenderValue } = options;
 
   const left = sPadding + rowMargin;
   const x = rowFontAlign === 'right' ? sPadding : 0;
@@ -77,8 +77,8 @@ export function drawRows<O extends IDrawLevelOptions>(params: IParams<any, O>) {
     ctx.stroke(getLinePath(left, y, width, y));
 
     if (rowFont) {
-      const label = top - (step * i);
-      drawLabel(ctx, rowSkeleton, label, x, y, sPadding, rowFontSize);
+      const value = formatLabel(top - (step * i), rowRenderValue);
+      drawLabel(ctx, rowSkeleton, value, x, y, sPadding, rowFontSize);
     }
   }
 
@@ -188,7 +188,7 @@ export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>)
   if (!Number.isFinite(rowCount) || rowCount <= 0 || rowStroke <= 0) return params;
 
   const { width, height, sPadding, footer, bottom, footerMargin } = options;
-  const { rowMargin, rowFont, rowFontAlign, rowFontSize, rowSkeleton } = options;
+  const { rowMargin, rowFont, rowFontAlign, rowFontSize, rowSkeleton, rowRenderValue } = options;
 
   const left = sPadding + rowMargin;
   const x = rowFontAlign === 'right' ? sPadding : 0;
@@ -198,7 +198,11 @@ export function drawFooter<O extends IDrawLevelOptions>(params: IParams<any, O>)
   setRowStyle(params, true);
 
   ctx.stroke(getLinePath(left, y, width, y));
-  if (rowFont) drawLabel(ctx, rowSkeleton, bottom, x, y, sPadding, rowFontSize);
+
+  if (rowFont) {
+    const value = formatLabel(bottom, rowRenderValue);
+    drawLabel(ctx, rowSkeleton, value, x, y, sPadding, rowFontSize);
+  }
 
   const { columns } = params;
 

@@ -8,7 +8,6 @@
     "outDir": "lib",
     "allowJs": false,
     "skipLibCheck": true,
-    "incremental": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -22,7 +21,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
     "removeComments": true
   },

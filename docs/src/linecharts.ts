@@ -1,5 +1,5 @@
 import { getCanvas, getRandomData } from './helpers';
-import { createLineChart } from '../../src/linechart';
+import { createLineChart } from '../../src';
 
 function getData(count: number) {
   return getRandomData(count)
@@ -11,6 +11,7 @@ createLineChart(getCanvas('line-chart-1'), getData(10), {
   rowFont: 'system, -apple-system, BlinkMacSystemFont',
   top: 100,
   bottom: 0,
+  rowRenderValue: (value: number) => `$${Math.round(value)}`,
 });
 
 createLineChart(getCanvas('line-chart-2'), getData(6), {
