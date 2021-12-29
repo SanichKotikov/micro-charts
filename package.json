@@ -34,12 +34,12 @@
     "url": "https://github.com/SanichKotikov/micro-charts/issues"
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "5.0.5",
+    "@size-limit/preset-small-lib": "7.0.5",
     "css-loader": "6.5.1",
     "gh-pages": "3.2.3",
     "html-webpack-plugin": "5.5.0",
     "mini-css-extract-plugin": "2.4.5",
-    "size-limit": "5.0.5",
+    "size-limit": "7.0.5",
     "ts-loader": "9.2.6",
     "typescript": "4.5.4",
     "webpack": "5.65.0",
