@@ -81,6 +81,7 @@ export interface IBarOptions {
   barWidth: number;
   barMargin: number;
   barRadius: number;
+  stacked?: boolean;
 }
 
 export type IDrawBarOptions = IEventHandlers & IBarOptions;

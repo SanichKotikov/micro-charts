@@ -1,6 +1,6 @@
 {
   "name": "micro-charts",
-  "version": "7.3.0",
+  "version": "7.4.0",
   "description": "A tiny library for visualizing your data",
   "main": "lib/index.js",
   "module": "lib/index.js",

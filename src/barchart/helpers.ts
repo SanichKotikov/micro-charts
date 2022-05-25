@@ -5,8 +5,8 @@ export function calcData(
   data: ReadonlyArray<Readonly<IBarChartData>>,
   options: Readonly<IOptions>,
 ): ReadonlyArray<Readonly<IBarData>> {
-  const { W, H, head, footer, calcX } = calcFactors(options, data.length);
-  const calcBars = getBarFunc(options, W, H, head);
+  const { W, H, footer, calcX } = calcFactors(options, data.length);
+  const calcBars = getBarFunc(options, W, H);
 
   return data.map((item, i) => {
     const x = calcX(i);

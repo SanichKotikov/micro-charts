@@ -21,7 +21,12 @@ export function createBarChart(
   setupCanvas(canvas, opt.ratio);
 
   const paths = calcData(data, opt);
-  const params: IParams<IBarData, IOptions> = { canvas, drawData: paths, options: opt, columns: getColumns(data) };
+  const params: IParams<IBarData, IOptions> = {
+    canvas,
+    drawData: paths,
+    options: opt,
+    columns: getColumns(data),
+  };
 
   draw(params);
 

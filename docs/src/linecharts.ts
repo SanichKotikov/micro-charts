@@ -8,7 +8,6 @@ function getData(count: number) {
 
 createLineChart(getCanvas('line-chart-1'), getData(10), {
   lineFill: ['rgba(130, 210, 255, 0)', 'rgba(130, 210, 255, 0.3)'],
-  rowFont: 'system, -apple-system, BlinkMacSystemFont',
   top: 100,
   bottom: 0,
   rowRenderValue: (value: number) => `$${Math.round(value)}`,

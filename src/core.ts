@@ -53,7 +53,7 @@ export function calcPadding(
 
   return {
     sPadding: Math.ceil(maxLabelWidth),
-    vPadding: Math.max(stroke),
+    vPadding: stroke,
   };
 }
 
@@ -89,7 +89,8 @@ export function calcFactors<O extends IRowOptions & IGeometry>(options: O, dataC
   const H = calcH(height, vPadding, head, footer) / (top - bottom);
 
   return {
-    W, H, head, footer: height - footer,
+    W, H,
+    footer: height - footer,
     calcX: (idx: number) => (idx * W) + left,
     calcY: (value: number) => (top - value) * H + vPadding + head,
   };
@@ -151,19 +152,23 @@ export function getBarPath(x: number, y: number, w: number, b: number, r: number
   return path;
 }
 
-export function getBarFunc<O extends IBarOptions & IGeometry>(options: O, W: number, H: number, head: number) {
-  const { height, top, bottom, vPadding, footer, barWidth, barMargin, barRadius } = options;
-  const bW = barWidth + (barMargin * 2);
+export function getBarFunc<O extends IBarOptions & IGeometry>(options: O, W: number, H: number) {
+  const bW = options.barWidth + (options.barMargin * 2);
 
   return (values: ReadonlyArray<number>, x: number) => {
-    const shift = (W - (bW * values.length)) / 2;
+    const shift = (W - (bW * (options.stacked ? 1 : values.length))) / 2;
+    let bottom = options.height - options.footer;
 
     return values.map((value, idx) => {
-      if (value <= bottom) return new Path2D();
+      if (value <= options.bottom) return new Path2D();
 
-      const pX = x + shift + (idx * bW) + barMargin;
-      const pY = (top - value) * H + vPadding + head;
-      return getBarPath(pX, pY, barWidth, height - footer, barRadius);
+      const pX = x + shift + ((options.stacked ? 0 : idx) * bW) + options.barMargin;
+      const pY = bottom - (value * H);
+
+      const path = getBarPath(pX, pY, options.barWidth, bottom, options.barRadius);
+      if (options.stacked) bottom = pY;
+
+      return path;
     });
   };
 }
