@@ -36,15 +36,15 @@
   "devDependencies": {
     "@size-limit/preset-small-lib": "7.0.8",
     "css-loader": "6.7.1",
-    "gh-pages": "3.2.3",
+    "gh-pages": "4.0.0",
     "html-webpack-plugin": "5.5.0",
     "mini-css-extract-plugin": "2.6.0",
     "size-limit": "7.0.8",
-    "ts-loader": "9.2.8",
-    "typescript": "4.6.3",
-    "webpack": "5.72.0",
+    "ts-loader": "9.3.0",
+    "typescript": "4.7.2",
+    "webpack": "5.72.1",
     "webpack-cli": "4.9.2",
-    "webpack-dev-server": "4.8.1"
+    "webpack-dev-server": "4.9.0"
   },
   "size-limit": [
     {
