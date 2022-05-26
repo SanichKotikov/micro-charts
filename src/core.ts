@@ -1,4 +1,4 @@
-import type { IBarOptions, IEdges, IGeometry, IPadding, IRowOptions } from './types';
+import type { IBarOptions, IDrawData, IDrawBarData, IEdges, IGeometry, IPadding, IRowOptions } from './types';
 
 export function pipe(...fus: Function[]) {
   return <T>(init: T) => fus.reduce((res, fn) => fn(res), init);
@@ -10,6 +10,10 @@ export function getFontStr(name: string, size: number) {
 
 export function hasFooter<T extends { label?: string }>(items: ReadonlyArray<T>) {
   return items.some(item => typeof item.label === 'string');
+}
+
+export function isDrawBarData(data: IDrawData): data is IDrawBarData {
+  return Array.isArray((data as IDrawBarData).bars);
 }
 
 export function calcH(height: number, padding: number, head: number, footer: number) {

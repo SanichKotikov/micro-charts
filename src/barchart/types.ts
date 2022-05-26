@@ -18,8 +18,10 @@ export interface IBarChartData {
 
 export type IBarData = IDrawBarData<IBarChartData>;
 
-export type BarChartClickHandler = (data: Readonly<IBarChartData>) => void;
-export type BarChartHoverHandler = (value?: IHoverData<Readonly<IBarChartData>>) => void;
+export interface IBarHoverData<T> extends IHoverData<T> {dataIndex: number;}
+
+export type BarChartClickHandler = (data: Readonly<IBarChartData>, dataIndex: number | undefined) => void;
+export type BarChartHoverHandler = (value?: IBarHoverData<Readonly<IBarChartData>>) => void;
 type EventHandlers = IEventHandlers<BarChartClickHandler, BarChartHoverHandler>;
 
 export type IBarChartOptions = ICanvas & EventHandlers & IHoverOptions & Partial<IEdges> & IRowOptions & IBarOptions;
